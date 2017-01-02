@@ -3,6 +3,7 @@ package org.cats.accounting.domain;
 import org.cats.core.BaseModel;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
@@ -32,8 +33,13 @@ public class AccountTransaction extends BaseModel {
     private Integer woredaId;
     private Integer fdpId;
 
+    @ManyToOne
     private Posting posting;
+
+    @ManyToOne
     private Account account;
+
+    @ManyToOne
     private Journal journal;
 
     public UUID getTransactionCode() {
