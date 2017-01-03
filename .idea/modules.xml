@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cats-server.iml" filepath="$PROJECT_DIR$/.idea/modules/cats-server.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cats-server_main.iml" filepath="$PROJECT_DIR$/.idea/modules/cats-server_main.iml" group="cats-server" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cats-server_test.iml" filepath="$PROJECT_DIR$/.idea/modules/cats-server_test.iml" group="cats-server" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cats-core.iml" filepath="$PROJECT_DIR$/.idea/modules/cats-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cats-core_main.iml" filepath="$PROJECT_DIR$/.idea/modules/cats-core_main.iml" group="cats-core" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cats-core_test.iml" filepath="$PROJECT_DIR$/.idea/modules/cats-core_test.iml" group="cats-core" />
     </modules>
   </component>
 </project>

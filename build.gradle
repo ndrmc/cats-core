@@ -19,7 +19,7 @@ apply plugin: 'org.flywaydb.flyway'
 
 
 jar {
-	baseName = 'cats-server'
+	baseName = 'cats-core'
 	version = '0.0.1-SNAPSHOT'
 }
 sourceCompatibility = 1.8
@@ -40,7 +40,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-devtools')
 	compile('io.springfox:springfox-swagger2:2.5.0')
 	compile('io.springfox:springfox-swagger-ui:2.5.0')
-
+	compile('org.apache.poi:poi-ooxml:3.16-beta1')
 	//compile('org.flywaydb:flyway-core:4.0.3')
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
@@ -70,7 +70,7 @@ task mkm <<{
 }
 
 flyway{
-	url = 'jdbc:postgresql://localhost:5432/cats'
+	url = 'jdbc:postgresql://localhost:5432/cats_dev'
 	user = 'cats'
 	password = 'cats'
 }
