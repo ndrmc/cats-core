@@ -9,12 +9,9 @@ services:
     depends_on:
       - mongo
       - postgres
-      - redis
+
   mongo:
     image: mongo
 
   postgres:
     image: postgres
-
-  redis:
-    image: redis
