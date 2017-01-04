@@ -10,4 +10,8 @@ import java.util.List;
 public interface ReceiptService {
 
     public List<Receipt> getAllReceipts();
+
+    public Receipt getReceiptById(Long id);
+
+    public Receipt saveReceipt( Receipt receipt);
 }
