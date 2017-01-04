@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cats-core.iml" filepath="$PROJECT_DIR$/.idea/modules/cats-core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cats-core_main.iml" filepath="$PROJECT_DIR$/.idea/modules/cats-core_main.iml" group="cats-core" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cats-core_test.iml" filepath="$PROJECT_DIR$/.idea/modules/cats-core_test.iml" group="cats-core" />
+      <module fileurl="file://$PROJECT_DIR$/cats-core.iml" filepath="$PROJECT_DIR$/cats-core.iml" />
     </modules>
   </component>
 </project>

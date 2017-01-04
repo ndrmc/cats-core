@@ -18,11 +18,5 @@
         <processorPath useClasspath="true" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="cats-core_main" target="1.8" />
-      <module name="cats-core_test" target="1.8" />
-      <module name="cats-server_main" target="1.8" />
-      <module name="cats-server_test" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>
