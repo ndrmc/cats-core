@@ -1,5 +1,6 @@
 package org.cats.stock.receipt.services;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.cats.stock.receipt.domain.Receipt;
 
 import java.util.List;
@@ -14,4 +15,9 @@ public interface ReceiptService {
     public Receipt getReceiptById(Long id);
 
     public Receipt saveReceipt( Receipt receipt);
+
+    public Receipt updateReceipt(Receipt receipt);
+
+    public void deleteReceipt( Receipt receipt);
+
 }

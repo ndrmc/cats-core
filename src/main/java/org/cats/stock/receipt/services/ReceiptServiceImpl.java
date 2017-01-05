@@ -1,6 +1,9 @@
 package org.cats.stock.receipt.services;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.sun.org.apache.regexp.internal.RESyntaxException;
 import org.cats.stock.receipt.domain.Receipt;
+import org.cats.stock.receipt.error.ReceiptServiceException;
 import org.cats.stock.receipt.repository.ReceiptRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,5 +36,20 @@ public class ReceiptServiceImpl implements ReceiptService {
     @Override
     public Receipt saveReceipt(Receipt receipt) {
         return receiptRepository.save(receipt);
+    }
+
+    @Override
+    public Receipt updateReceipt(Receipt receipt) {
+
+        if( !receiptRepository.exists(receipt.getId())) {
+            throw new ReceiptServiceException("No receipt document exists for the id: " + receipt.getId().toString());
+        }
+
+        return receiptRepository.save(receipt);
+    }
+
+    @Override
+    public void deleteReceipt(Receipt receipt) {
+        receiptRepository.delete(receipt);
     }
 }
