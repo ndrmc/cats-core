@@ -33,7 +33,7 @@ public class Receipt extends BaseModel {
     @OneToMany(mappedBy = "receipt")
     private List<ReceiptLine> receiptLines;
 
-    Receipt(){}
+    public Receipt(){}
 
 
     public String getGrnNo() {

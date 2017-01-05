@@ -7,8 +7,10 @@ import org.cats.stock.receipt.domain.Receipt;
 import org.cats.stock.receipt.error.ReceiptControllerException;
 import org.cats.stock.receipt.repository.ReceiptRepository;
 import org.cats.stock.receipt.services.ReceiptService;
+import org.cats.stock.receipt.services.ReceiptServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,33 +22,31 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping(value = "/receipt")
-@Api(value = "receipt", description = "Manages hub receipt (GRN) records")
+@RequestMapping(value = "/receipts")
+@Api(value = "receipts", description = "Manages hub receipt (GRN) records")
 public class ReceiptController {
 
     private final ReceiptService receiptService;
-    private final ReceiptRepository receiptRepository;
 
 
     @Autowired
-    public ReceiptController(ReceiptService receiptService, ReceiptRepository receiptRepository) {
+    public ReceiptController(ReceiptService receiptService) {
         this.receiptService = receiptService;
-        this.receiptRepository = receiptRepository;
     }
 
-    @RequestMapping(  method = RequestMethod.GET )
+    @RequestMapping(  method = RequestMethod.GET , produces = {MediaType.APPLICATION_JSON_UTF8_VALUE} )
     @ApiOperation(value = "Returns all receipts")
     public List<Receipt> getReceipts() {
         return receiptService.getAllReceipts();
     }
 
-    @RequestMapping( value = "/{id}", method = RequestMethod.GET )
+    @RequestMapping( value = "/{id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE} )
     @ApiOperation(value = "Finds a receipt document by its Id.")
     public Receipt getReceipt(@PathVariable("id") Long id ) {
         return receiptService.getReceiptById(id);
     }
 
-    @RequestMapping( method = RequestMethod.POST )
+    @RequestMapping( method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE} )
     @ApiOperation(value = "Creates a new Receipt document.")
     public Receipt createReceipt(@Validated @RequestBody Receipt receipt) {
         return receiptService.saveReceipt(receipt);

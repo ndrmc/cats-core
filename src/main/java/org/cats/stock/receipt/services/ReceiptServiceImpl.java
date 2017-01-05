@@ -1,7 +1,5 @@
 package org.cats.stock.receipt.services;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.sun.org.apache.regexp.internal.RESyntaxException;
 import org.cats.stock.receipt.domain.Receipt;
 import org.cats.stock.receipt.error.ReceiptServiceException;
 import org.cats.stock.receipt.repository.ReceiptRepository;
