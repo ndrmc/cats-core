@@ -14,30 +14,6 @@ public class DispatchTestUtil {
 		testDispatch.setRequisitionNo("12345");
 		return testDispatch;
 	}
-
-/*	public static List<Dispatch> createDispatchList(int howMany) {
-		Dispatch testDispatch1= new Dispatch();
-		testDispatch1.setGin("gin1");
-		testDispatch1.setOperationId(1);
-		testDispatch1.setRequisitionNo("12345");
-		
-		Dispatch testDispatch2= new Dispatch();
-		testDispatch1.setGin("gin2");
-		testDispatch1.setOperationId(1);
-		testDispatch1.setRequisitionNo("123456");
-		
-		Dispatch testDispatch3= new Dispatch();
-		testDispatch1.setGin("gin3");
-		testDispatch1.setOperationId(2);
-		testDispatch1.setRequisitionNo("12345");
-		
-		List<Dispatch> dispatches= new ArrayList<>();
-		dispatches.add(testDispatch1);
-		dispatches.add(testDispatch2);
-		dispatches.add(testDispatch3);
-		
-		return dispatches;
-	}*/
 	
 	public static List<Dispatch> createDispatchList(int howMany) {
 	

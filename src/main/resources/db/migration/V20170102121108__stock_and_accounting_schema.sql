@@ -245,4 +245,3 @@ references receipt (id);
 alter table unit_of_measure
   add constraint fk_unit_of__reference_uom_cate foreign key (uom_category_id)
 references uom_category (id);
-

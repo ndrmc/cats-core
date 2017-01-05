@@ -22,8 +22,8 @@ public class Dispatch extends BaseModel {
 	private Integer operationId;
 	private Integer periodMonth;
 	private Integer periodRound;
-	private String fdpId;
-	private String transportOrderId;
+	private Integer fdpId;
+	private Integer transportOrderId;
 	private String driver;
 	private String plateNo;
 	private Date createdDate;
@@ -79,21 +79,21 @@ public class Dispatch extends BaseModel {
 
 	public void setPeriodRound(Integer periodRound) {
 		this.periodRound = periodRound;
-	}
-	
-	public String getFdpId() {
+	}	
+
+	public Integer getFdpId() {
 		return fdpId;
 	}
 
-	public void setFdpId(String fdpId) {
+	public void setFdpId(Integer fdpId) {
 		this.fdpId = fdpId;
 	}
 
-	public String getTransportOrderId() {
+	public Integer getTransportOrderId() {
 		return transportOrderId;
 	}
 
-	public void setTransportOrderId(String transportOrderId) {
+	public void setTransportOrderId(Integer transportOrderId) {
 		this.transportOrderId = transportOrderId;
 	}
 
