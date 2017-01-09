@@ -1,4 +1,4 @@
-package org.cats.stock.receipt.domain;
+package org.cats.stock.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.cats.core.BaseModel;

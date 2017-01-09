@@ -1,7 +1,6 @@
-package org.cats.stock.receipt.services;
+package org.cats.stock.services;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import org.cats.stock.receipt.domain.Receipt;
+import org.cats.stock.domain.Receipt;
 
 import java.util.List;
 

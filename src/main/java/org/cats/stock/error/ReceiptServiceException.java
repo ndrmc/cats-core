@@ -1,4 +1,4 @@
-package org.cats.stock.receipt.error;
+package org.cats.stock.error;
 
 /**
  * Created by alexander on 1/4/17.

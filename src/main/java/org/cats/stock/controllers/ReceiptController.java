@@ -1,13 +1,11 @@
-package org.cats.stock.receipt.controllers;
+package org.cats.stock.controllers;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.cats.stock.receipt.domain.Receipt;
-import org.cats.stock.receipt.error.ReceiptControllerException;
-import org.cats.stock.receipt.repository.ReceiptRepository;
-import org.cats.stock.receipt.services.ReceiptService;
-import org.cats.stock.receipt.services.ReceiptServiceImpl;
+import org.cats.stock.domain.Receipt;
+import org.cats.stock.error.ReceiptControllerException;
+import org.cats.stock.services.ReceiptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

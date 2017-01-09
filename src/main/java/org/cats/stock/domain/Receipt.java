@@ -1,4 +1,4 @@
-package org.cats.stock.receipt.domain;
+package org.cats.stock.domain;
 
 import org.cats.core.BaseModel;
 

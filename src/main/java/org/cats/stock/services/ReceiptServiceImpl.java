@@ -1,8 +1,8 @@
-package org.cats.stock.receipt.services;
+package org.cats.stock.services;
 
-import org.cats.stock.receipt.domain.Receipt;
-import org.cats.stock.receipt.error.ReceiptServiceException;
-import org.cats.stock.receipt.repository.ReceiptRepository;
+import org.cats.stock.domain.Receipt;
+import org.cats.stock.error.ReceiptServiceException;
+import org.cats.stock.repository.ReceiptRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
