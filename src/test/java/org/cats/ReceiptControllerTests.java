@@ -81,8 +81,8 @@ public class ReceiptControllerTests  {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 
-    //@Test
-    public void testCreateReceipt() throws Exception{
+    @Test
+    public void testCreateReceipt() throws Exception {
 
         final String grnNo = "8349238";
 
@@ -93,19 +93,24 @@ public class ReceiptControllerTests  {
         Receipt receipt = new Receipt();
         receipt.setGrnNo(grnNo);
 
-
-        /*ArgumentCaptor<Receipt> argument = ArgumentCaptor.forClass(Receipt.class);
-        verify(receiptService).saveReceipt(argument.capture());
-        assertEquals(grnNo, argument.getValue().getGrnNo());*/
-
         when( receiptService.saveReceipt(isA(Receipt.class)) )
                 .thenReturn(receipt);
 
         this.mockMvc.perform(post("/receipts")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(new ObjectMapper().writeValueAsString(receiptObj))
-                .accept(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.grnNo").value(grnNo));
+
+        ArgumentCaptor<Receipt> argument = ArgumentCaptor.forClass(Receipt.class);
+        verify(receiptService).saveReceipt(argument.capture());
+
+
+        assertEquals(grnNo, argument.getValue().getGrnNo());
+
+
+
     }
 }

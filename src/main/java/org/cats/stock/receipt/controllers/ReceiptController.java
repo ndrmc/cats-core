@@ -46,7 +46,7 @@ public class ReceiptController {
         return receiptService.getReceiptById(id);
     }
 
-    @RequestMapping( method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE} )
+    @RequestMapping( method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE}, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE} )
     @ApiOperation(value = "Creates a new Receipt document.")
     public Receipt createReceipt(@Validated @RequestBody Receipt receipt) {
         return receiptService.saveReceipt(receipt);
