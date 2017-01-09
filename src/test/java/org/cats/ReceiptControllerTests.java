@@ -27,8 +27,7 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -110,7 +109,77 @@ public class ReceiptControllerTests  {
 
         assertEquals(grnNo, argument.getValue().getGrnNo());
 
+    }
 
+    @Test
+    public void testUpdateReceiptPatchesAnExistingReceiptDocument()  throws Exception  {
+
+        final String originalGrnNo = "8349238";
+        final String newGrnNo = "999999";
+
+        Map receiptPatchObj = new HashMap();
+        receiptPatchObj.put("grnNo", newGrnNo);
+
+
+        Receipt receipt = new Receipt();
+        receipt.setGrnNo(originalGrnNo);
+
+        when( receiptService.getReceiptById(anyLong()) )
+                .thenReturn(receipt);
+
+        when( receiptService.updateReceipt(isA(Receipt.class)) )
+                .thenReturn(receipt);
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        this.mockMvc.perform(patch("/receipts/1")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content( mapper.writeValueAsString(receiptPatchObj))
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.grnNo").value(newGrnNo));
+
+        ArgumentCaptor<Receipt> argument = ArgumentCaptor.forClass(Receipt.class);
+        verify(receiptService).updateReceipt(argument.capture());
+
+
+        assertEquals(newGrnNo, argument.getValue().getGrnNo());
+
+    }
+
+    @Test
+    public void testDeleteReceiptDeletesAReceiptDocument()  throws Exception  {
+
+        final String grnNumber = "8349238";
+
+        Map receiptPatchObj = new HashMap();
+        receiptPatchObj.put("grnNo", grnNumber);
+
+
+        Receipt receipt = new Receipt();
+        receipt.setGrnNo(grnNumber);
+
+        when( receiptService.getReceiptById(anyLong()) )
+                .thenReturn(receipt);
+
+        doNothing().when(receiptService).deleteReceipt(isA(Receipt.class));
+
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        this.mockMvc.perform(delete("/receipts/1")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content( mapper.writeValueAsString(receiptPatchObj))
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isNoContent());
+
+
+        ArgumentCaptor<Receipt> argument = ArgumentCaptor.forClass(Receipt.class);
+        verify(receiptService).deleteReceipt(argument.capture());
+
+
+        assertEquals(grnNumber, argument.getValue().getGrnNo());
 
     }
 }

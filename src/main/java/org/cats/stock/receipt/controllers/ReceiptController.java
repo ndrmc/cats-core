@@ -52,7 +52,7 @@ public class ReceiptController {
         return receiptService.saveReceipt(receipt);
     }
 
-    @RequestMapping( value = "/{id}",method = RequestMethod.PATCH )
+    @RequestMapping( value = "/{id}",method = RequestMethod.PATCH , consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE}, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE} )
     @ApiOperation(value = "Updates a receipt document.")
     public Receipt updateReceipt(@PathVariable("id") Long id, @RequestBody ObjectNode receiptDiff) {
 
