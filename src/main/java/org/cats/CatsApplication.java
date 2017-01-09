@@ -33,7 +33,7 @@ import static springfox.documentation.schema.AlternateTypeRules.newRule;
 @SpringBootApplication
 public class CatsApplication {
 
-	private static URI catsV1URI;
+	private static URI catsV1URI=URI.create("https://jsonplaceholder.typicode.com/posts");
 
 	public static void main(String[] args) {
 		SpringApplication.run(CatsApplication.class, args);

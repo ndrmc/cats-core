@@ -88,17 +88,12 @@ public class DispatchService {
 		HttpGet httpGet = new HttpGet(CatsApplication.getCatsV1URI());
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 
-		ResponseHandler<List<Integer>> rh = null;	
-		CatsResponseHandler<List<Integer>> catsHandler = new CatsResponseHandler<List<Integer>>();
-		catsHandler.getResponse(httpclient, httpGet);
+		
+		CatsResponseHandler catsHandler = new CatsResponseHandler(List.class);
+		
 		 
-		try {
-			List<Integer> fdpIds = httpclient.execute(httpGet, rh);
-			return repository.findByFdpIdIn(fdpIds);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
+		List<Integer> fdpIds = (List<Integer>) catsHandler.getResponse(httpclient, httpGet);
+		return repository.findByFdpIdIn(fdpIds);
 		
 		
 		

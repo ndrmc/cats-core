@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.cats.stock.domain.Dispatch;
+import org.cats.stock.domain.DispatchItem;
 
 public class DispatchTestUtil {
 
@@ -26,29 +27,20 @@ public class DispatchTestUtil {
 		}
 		return dispatches;
 	}
-
-	public static List<Dispatch> createDispatchesToFilter() {
-		Dispatch testDispatch1= new Dispatch();
-		testDispatch1.setGin("gin1");
-		testDispatch1.setOperationId(1);
-		testDispatch1.setRequisitionNo("12345");
-		
-		Dispatch testDispatch2= new Dispatch();
-		testDispatch1.setGin("gin2");
-		testDispatch1.setOperationId(1);
-		testDispatch1.setRequisitionNo("123456");
-		
-		Dispatch testDispatch3= new Dispatch();
-		testDispatch1.setGin("gin3");
-		testDispatch1.setOperationId(2);
-		testDispatch1.setRequisitionNo("12345");
-		
-		List<Dispatch> dispatches= new ArrayList<>();
-		dispatches.add(testDispatch1);
-		dispatches.add(testDispatch2);
-		dispatches.add(testDispatch3);
-		
-		return dispatches;
+	
+	public static  DispatchItem createDispatchItem() {
+		DispatchItem item = new DispatchItem();
+		return item;
 	}
+
+	public static  List<DispatchItem> createDispatchItemList(int size) {
+		List<DispatchItem> items = new ArrayList<>();
+		for(int i=0; i<size;i++){
+			DispatchItem item =new DispatchItem();
+			items.add(item);
+		}
+		return items;
+	}
+	
 
 }

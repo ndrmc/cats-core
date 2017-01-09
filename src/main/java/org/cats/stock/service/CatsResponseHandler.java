@@ -15,46 +15,50 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
+
 import java.lang.reflect.ParameterizedType;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CatsResponseHandler<T> {
-	
+	private final Class<T> type;
 
+	public CatsResponseHandler (Class<T> myType) {
+		this.type = myType;
+	}
 
-	public T getResponse(CloseableHttpClient httpclient,HttpGet httpget ) {
-		Class<T> clazz = (Class<T>) ((ParameterizedType)getClass().getGenericSuperclass())
-				      		.getActualTypeArguments()[0];
-		
+	T getResponse(CloseableHttpClient httpclient,HttpGet httpget ) {
+		Class<T> clazz = this.type;
+
 		T responsObj=null;
 		ResponseHandler<T> rh = new ResponseHandler<T>() {
 
 			@Override
 			public T handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
-			        StatusLine statusLine = response.getStatusLine();
-			        HttpEntity entity = response.getEntity();
-			        if (statusLine.getStatusCode() >= 300) {
-			            throw new HttpResponseException(
-			                    statusLine.getStatusCode(),
-			                    statusLine.getReasonPhrase());
-			        }
-			        if (entity == null) {
-			            throw new ClientProtocolException("Response contains no content");
-			        }
-			        ObjectMapper mapper =new ObjectMapper();
-			     
-			        ContentType contentType = ContentType.getOrDefault(entity);
-			        Charset charset = contentType.getCharset();
-			        Reader reader = new InputStreamReader(entity.getContent(), charset);
-			        
-			        return mapper.readValue(reader, clazz);
-			        
-			    
+				StatusLine statusLine = response.getStatusLine();
+				HttpEntity entity = response.getEntity();
+				if (statusLine.getStatusCode() >= 300) {
+					throw new HttpResponseException(
+							statusLine.getStatusCode(),
+							statusLine.getReasonPhrase());
+				}
+				if (entity == null) {
+					throw new ClientProtocolException("Response contains no content");
+				}
+				ObjectMapper mapper =new ObjectMapper();
+
+				ContentType contentType = ContentType.getOrDefault(entity);
+				Charset charset = contentType.getCharset();
+				Reader reader = new InputStreamReader(entity.getContent(), charset);
+				System.out.println("----------------response---------------- \n"+EntityUtils.toString(entity, "UTF-8"));
+				return mapper.readValue(reader, clazz);
+
+
 			}
 		};
 		try {
-		 responsObj = httpclient.execute(httpget, rh);
+			responsObj = httpclient.execute(httpget, rh);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -63,8 +67,8 @@ public class CatsResponseHandler<T> {
 
 	}
 
-	
 
-		
-	
+
+
+
 }

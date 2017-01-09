@@ -2,12 +2,26 @@ package org.cats.stock.service;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import javax.swing.text.html.parser.Entity;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.ParseException;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.cats.stock.domain.Dispatch;
 import org.cats.stock.repository.DispatchRepository;
 import org.cats.stock.util.DispatchTestUtil;
@@ -16,6 +30,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.mock.http.client.MockClientHttpResponse;
 
 import javassist.NotFoundException;
 
@@ -26,6 +41,15 @@ public class DispatchServiceTest {
 	private DispatchRepository dispatchRepository;
 
 	private DispatchService dispatchService;
+	
+	@Mock 
+	private CloseableHttpClient httpClinet;
+
+	@Mock
+	CloseableHttpResponse mockHttpResponse;
+	
+	 
+	private static String fdp_ids_response= "{[1,2,3]}";
 
 	@Before
 	public void setUp() throws Exception {
@@ -46,6 +70,23 @@ public class DispatchServiceTest {
         when(dispatchRepository.save(any(Dispatch.class))).thenReturn(dispatch);
 		return dispatch;
     }
+	
+	private void stubHttpClientResponse() {
+		
+		when(dispatchRepository.findByFdpIdIn(any())).thenReturn(DispatchTestUtil.createDispatchList(3));
+		
+		final HttpEntity mockHttpEntity = mock(HttpEntity.class);
+		when(mockHttpResponse.getEntity()).thenReturn(mockHttpEntity);
+		
+		final ByteArrayInputStream responseStream = new ByteArrayInputStream(new String(fdp_ids_response).getBytes());
+	    try {
+			when(mockHttpEntity.getContent()).thenReturn(responseStream);
+			when(httpClinet.execute(any())).thenReturn(mockHttpResponse);
+		} catch (UnsupportedOperationException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} 
+	}
 
 	@Test
 	public void testFindById() {
@@ -142,6 +183,19 @@ public class DispatchServiceTest {
 
 	@Test
 	public void testGetListbyRegion() {
+		stubHttpClientResponse();
+		List<Dispatch> dispatches = dispatchService.getListbyRegion(Integer.parseInt("1"));
+		
+		assertNotNull(dispatches);
+		assertEquals(3, dispatches.size());
+		verify(dispatchRepository, times(1)).findByFdpIdIn(any());
+		
+		try {
+			assertEquals(EntityUtils.toString(mockHttpResponse.getEntity(), "UTF-8"),fdp_ids_response);
+		} catch (ParseException | IOException e) {
+			fail();
+			e.printStackTrace();
+		}
 		
 	}
 

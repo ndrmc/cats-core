@@ -32,7 +32,7 @@ public class DispatchItem extends BaseModel {
 	public void setCommodityId(Integer commodityId) {
 		this.commodityId = commodityId;
 	}
-
+	
 	public Integer getDispatchId() {
 		return dispatchId;
 	}

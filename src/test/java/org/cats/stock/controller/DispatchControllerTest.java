@@ -90,12 +90,12 @@ public class DispatchControllerTest {
 	public void testUpdateDispatch() {
 
 		final Dispatch savedDispatch = stubServiceToReturnStoredDispatch();
-		Dispatch dispatch=new Dispatch();
+		
 		Dispatch updatedDispatch = null;
 		try {
 
-			updatedDispatch=dispatchController.updateDispatch(dispatch);
-			verify(dispatchService, times(1)).update(dispatch);
+			updatedDispatch=dispatchController.updateDispatch(savedDispatch);
+			verify(dispatchService, times(1)).update(savedDispatch);
 
 		} catch (NotFoundException e) {
 			fail("shouldn't throw not found exception");
