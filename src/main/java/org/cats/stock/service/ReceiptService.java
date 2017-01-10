@@ -11,13 +11,13 @@ import java.util.List;
 public class ReceiptService {
 
     @Autowired
-    ReceiptRepository repository;
+    ReceiptRepository receiptRepository;
 
     public List<Receipt> allReceipts(){
-        return repository.findAll();
+        return receiptRepository.findAll();
     }
 
     public Receipt getGrn(Long id){
-        return repository.findOne(id);
+        return receiptRepository.findOne(id);
     }
 }

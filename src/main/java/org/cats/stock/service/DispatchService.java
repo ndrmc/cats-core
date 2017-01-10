@@ -24,62 +24,62 @@ import javassist.NotFoundException;
 public class DispatchService {
 
 	@Autowired
-	private DispatchRepository repository;
+	private DispatchRepository dispatchRepository;
 	
 	
 	public DispatchRepository getRepository() {
-		return repository;
+		return dispatchRepository;
 	}
 
 	public void setRepository(DispatchRepository repository) {
-		this.repository = repository;
+		this.dispatchRepository = repository;
 	}
 
 	@Transactional
 	public Dispatch findById(@NotNull Long dispatchId) {
-		return repository.findOne(dispatchId);
+		return dispatchRepository.findOne(dispatchId);
 	}	
 
 	@Transactional(readOnly = true)
 	public Dispatch findByGin(String gin) {
-		return repository.findByGin(gin);
+		return dispatchRepository.findByGin(gin);
 	}
 
 
 	@Transactional
 	public Dispatch save(@NotNull @Valid final Dispatch dispatch) {
-		return repository.save(dispatch);
+		return dispatchRepository.save(dispatch);
 	}
 
 	@Transactional
 	public Dispatch update(@NotNull @Valid final Dispatch dispatch) throws NotFoundException {
-		Dispatch dispatched=repository.findOne(dispatch.getId());
+		Dispatch dispatched=dispatchRepository.findOne(dispatch.getId());
 		if(dispatched==null)
 			throw new NotFoundException("Dispatch with id "+dispatch.getId()+"not found");
-		return repository.save(dispatch);
+		return dispatchRepository.save(dispatch);
 	}
 
 	@Transactional
 	public void delete(@NotNull Long dispatchId) {
-		Dispatch dispatched=repository.findOne(dispatchId);
+		Dispatch dispatched=dispatchRepository.findOne(dispatchId);
 		if(dispatched!=null){
-			repository.delete(dispatchId);
+			dispatchRepository.delete(dispatchId);
 		}
 	}
 
 	@Transactional(readOnly = true)
 	public List<Dispatch> getList() {
-		return repository.findAll();
+		return dispatchRepository.findAll();
 	}
 	
 	@Transactional(readOnly = true)
 	public List<Dispatch> getListbyOperation(Integer operationId) {
-		return repository.findByOperationId(operationId);
+		return dispatchRepository.findByOperationId(operationId);
 	}
 
 	@Transactional(readOnly = true)
 	public List<Dispatch> getListbyRequisition(String requisistionNo) {
-		return repository.findByRequisitionNo(requisistionNo);
+		return dispatchRepository.findByRequisitionNo(requisistionNo);
 	}
 	
 	@Transactional(readOnly = true)
@@ -93,7 +93,7 @@ public class DispatchService {
 		
 		 
 		List<Integer> fdpIds = (List<Integer>) catsHandler.getResponse(httpclient, httpGet);
-		return repository.findByFdpIdIn(fdpIds);
+		return dispatchRepository.findByFdpIdIn(fdpIds);
 		
 		
 		

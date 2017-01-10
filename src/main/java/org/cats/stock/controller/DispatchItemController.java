@@ -25,29 +25,29 @@ public class DispatchItemController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DispatchItemController.class);
 	
 	@Autowired
-	private DispatchItemService service;
+	private DispatchItemService dispatchService;
 	
 
 	public void setDispatchItemService(DispatchItemService dispatchItemService) {
-		this.service = dispatchItemService;
+		this.dispatchService = dispatchItemService;
 	}
 
 	public DispatchItemService getDispatchItemService() {
-		return service;
+		return dispatchService;
 	}
 
 	@ApiOperation(value = "View all DispatchItem(GIN) records" )
 	@RequestMapping(value = "/dispatchItem", method = RequestMethod.GET)
 	public List<DispatchItem> listDispatchItems() {
 		LOGGER.debug("List all dispatches request");
-		return service.getList();
+		return dispatchService.getList();
 	}
 
 	@ApiOperation(value = "View a specific dispatchItem record by id" )
 	@RequestMapping(value = "/dispatchItem/{id}", method = RequestMethod.GET)
 	public DispatchItem getDispatchItemById(@PathVariable Long id) {
 		LOGGER.debug("Get dispatchItem by id"+ id);
-		return service.findById(id);
+		return dispatchService.findById(id);
 	}
 	
 	
@@ -55,14 +55,14 @@ public class DispatchItemController {
 	@RequestMapping(value = "/dispatchItem/dispatch/{dispatchId}", method = RequestMethod.GET)
 	public List<DispatchItem> listDispatchItemsbyDispatch(@PathVariable Integer dispatchId) {
 		LOGGER.debug("List all dispatches request");
-		return service.getListbyDispatch(dispatchId);
+		return dispatchService.getListbyDispatch(dispatchId);
 	}
 
 	@ApiOperation(value = "View dispatchItem record by project id" )
 	@RequestMapping(value = "/dispatchItem/project/{projectId}", method = RequestMethod.GET)
 	public List<DispatchItem> getDispatchItemsbyProject(@PathVariable Integer projectId) {
 		LOGGER.debug("Get dispatchItem by projectId");
-		return service.getListbyProject(projectId);
+		return dispatchService.getListbyProject(projectId);
 	}
 
 	
@@ -70,21 +70,21 @@ public class DispatchItemController {
 	@RequestMapping(value = "/dispatchItem", method = RequestMethod.POST)
 	public DispatchItem createDispatchItem(@RequestBody @Valid final DispatchItem dispatchItem) {
 		LOGGER.debug("Create dispatchItem request", dispatchItem);
-		return service.save(dispatchItem);
+		return dispatchService.save(dispatchItem);
 	}
 	
 	@ApiOperation(value = "Update an existing DispatchItem record" )
 	@RequestMapping(value = "/dispatchItem", method = RequestMethod.PUT)
 	public DispatchItem updateDispatchItem(@RequestBody @Valid final DispatchItem dispatchItem) throws NotFoundException {
 		LOGGER.debug("Create dispatchItem request", dispatchItem);
-		return service.update(dispatchItem);
+		return dispatchService.update(dispatchItem);
 	}
 
 	@ApiOperation(value = "Delete a DispatchItem record" )
 	@RequestMapping(value = "/dispatchItem/{id}", method = RequestMethod.DELETE)
 	public void deleteDispatchItem(@PathVariable Long id) {
 		LOGGER.debug("Delete dispatchItem request", id);
-		service.delete(id);
+		dispatchService.delete(id);
 	}	
 	
 }
