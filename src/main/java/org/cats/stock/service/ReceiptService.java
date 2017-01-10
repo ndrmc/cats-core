@@ -1,23 +1,36 @@
 package org.cats.stock.service;
 
 import org.cats.stock.domain.Receipt;
-import org.cats.stock.repository.ReceiptRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.cats.stock.domain.ReceiptLine;
 
 import java.util.List;
 
-@Service
-public class ReceiptService {
+/**
+ * Created by alexander on 1/4/17.
+ */
+public interface ReceiptService {
 
-    @Autowired
-    ReceiptRepository receiptRepository;
+    public List<Receipt> getAllReceipts();
 
-    public List<Receipt> allReceipts(){
-        return receiptRepository.findAll();
-    }
+    public Receipt getReceiptById(Long id);
 
-    public Receipt getGrn(Long id){
-        return receiptRepository.findOne(id);
-    }
+
+    public List<Receipt> getReceiptsByHubId(Integer hubId);
+
+    public List<Receipt> getReceiptsByStoreLocationId(Integer storeLocationId);
+
+    public ReceiptLine getReceiptLineById(Long id);
+
+    public Receipt saveReceipt( Receipt receipt);
+
+    public Receipt updateReceipt(Receipt receipt);
+
+    public void deleteReceipt( Receipt receipt);
+
+    public void deleteReceiptLine( ReceiptLine receiptLine );
+
+    public List<ReceiptLine> getReceiptLinesForReceipt( Receipt receipt);
+
+    public ReceiptLine saveReceiptLineItem( ReceiptLine receiptLineItem );
+
 }

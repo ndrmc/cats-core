@@ -1,16 +1,13 @@
 package org.cats.stock.service;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.protocol.HttpContext;
 import org.cats.CatsApplication;
 import org.cats.stock.domain.Dispatch;
 import org.cats.stock.repository.DispatchRepository;

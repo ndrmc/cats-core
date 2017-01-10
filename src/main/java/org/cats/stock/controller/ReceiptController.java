@@ -1,56 +1,98 @@
 package org.cats.stock.controller;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.cats.stock.domain.Receipt;
+import org.cats.stock.exception.ReceiptControllerException;
 import org.cats.stock.service.ReceiptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(value = "receipt", description = "Manages hub receipt (GRN) records")
-@Controller
-@RequestMapping(value = "receipt")
+/**
+ * Created by alexander on 1/4/17.
+ */
+
+@RestController
+@RequestMapping(value = "/receipts")
+@Api(value = "receipts", description = "Manages hub receipt (GRN) records")
 public class ReceiptController {
 
+    private final ReceiptService receiptService;
+
+
     @Autowired
-    ReceiptService service;
-
-    @ApiOperation(value = "Returns all GRNs available")
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<Receipt>> getGrns(){
-        return new ResponseEntity<>(service.allReceipts(), HttpStatus.OK);
+    public ReceiptController(ReceiptService receiptService) {
+        this.receiptService = receiptService;
     }
 
-    @ApiOperation(value = "Return a GRN record identified by its Id")
-    public ResponseEntity<Receipt> getGrn(@PathVariable("id") Long id){
-        return new ResponseEntity<Receipt>(service.getGrn(id),HttpStatus.OK);
+    @RequestMapping(  method = RequestMethod.GET , produces = {MediaType.APPLICATION_JSON_UTF8_VALUE} )
+    @ApiOperation(value = "Returns all receipts")
+    public List<Receipt> getReceipts() {
+        return receiptService.getAllReceipts();
     }
 
-    @ApiOperation(value = "Creates a new GRN record")
-    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> add(@RequestBody Receipt receipt){
-
-//        service.save(new Receipt(
-//                receipt.getGrnNo(),
-//                receipt.getInvoiceNo(),
-//                receipt.getPurchaseOrderNo()
-//                ...
-//        ));
-
-        return new ResponseEntity<>(null, HttpStatus.CREATED);
+    @RequestMapping( value = "/{id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE} )
+    @ApiOperation(value = "Finds a receipt document by its Id.")
+    public Receipt getReceipt(@PathVariable("id") Long id ) {
+        return receiptService.getReceiptById(id);
     }
 
+    @RequestMapping( value = "/hub/{id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE} )
+    @ApiOperation(value = "Finds receipt documents by their Hub Id.")
+    public List<Receipt> getReceiptsByHubId(@PathVariable("id") Integer hubId ) {
+        return receiptService.getReceiptsByHubId(hubId);
+    }
+
+    @RequestMapping( value = "/storeLocation/{id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE} )
+    @ApiOperation(value = "Finds receipt documents by their Store Location Id.")
+    public List<Receipt> getReceiptsByStoreLocationId(@PathVariable("id") Integer storeLocationId ) {
+        return receiptService.getReceiptsByStoreLocationId(storeLocationId);
+    }
+
+    @RequestMapping( method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE}, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE} )
+    @ApiOperation(value = "Creates a new Receipt document.")
+    public Receipt createReceipt(@Validated @RequestBody Receipt receipt) {
+        return receiptService.saveReceipt(receipt);
+    }
+
+    @RequestMapping( value = "/{id}",method = RequestMethod.PATCH , consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE}, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE} )
+    @ApiOperation(value = "Updates a receipt document.")
+    public Receipt updateReceipt(@PathVariable("id") Long id, @RequestBody ObjectNode receiptDiff) {
 
 
+        Receipt receipt = receiptService.getReceiptById(id);
+
+        if( null == receipt )  {
+            throw new ReceiptControllerException("Receipt document not found with the id: " + id.toString());
+        }
+
+        receipt.updateFields(receiptDiff);
+
+        return receiptService.updateReceipt(receipt);
+    }
+
+    @RequestMapping( value = "/{id}",method = RequestMethod.DELETE )
+    @ApiOperation(value = "Deletes a receipt document.")
+    public ResponseEntity<Receipt> deleteReceipt(@PathVariable("id") Long id) {
+
+        Receipt receipt = receiptService.getReceiptById(id);
+
+        if( null == receipt )  {
+            throw new ReceiptControllerException("Receipt document not found with the id: " + id.toString());
+        }
+
+
+        receiptService.deleteReceipt(receipt);
+
+        return new ResponseEntity<Receipt>(HttpStatus.NO_CONTENT);
+    }
 
 
 }
