@@ -89,15 +89,12 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 
 # End of https://www.gitignore.io/api/gradle,java,intellij
-<<<<<<< HEAD
+
 /bin/
 /.classpath
 /.project
-=======
-
-
 
 .idea/
 *.iml
 .DS_Store
->>>>>>> branch 'develop' of https://github.com/ndrmc/cats-core.git
+
