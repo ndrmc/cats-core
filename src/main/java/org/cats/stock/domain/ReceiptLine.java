@@ -1,6 +1,7 @@
 package org.cats.stock.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.cats.core.BaseModel;
 
 import javax.persistence.Entity;
