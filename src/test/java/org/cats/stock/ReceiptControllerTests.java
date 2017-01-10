@@ -1,9 +1,9 @@
 package org.cats.stock;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.cats.stock.controllers.ReceiptController;
+import org.cats.stock.controller.ReceiptController;
 import org.cats.stock.domain.Receipt;
-import org.cats.stock.services.ReceiptService;
+import org.cats.stock.service.ReceiptService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

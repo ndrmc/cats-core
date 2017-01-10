@@ -1,4 +1,4 @@
-package org.cats.stock.error;
+package org.cats.stock.exception;
 
 /**
  * Created by alexander on 1/4/17.

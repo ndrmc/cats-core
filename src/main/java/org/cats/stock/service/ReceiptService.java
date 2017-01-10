@@ -1,4 +1,4 @@
-package org.cats.stock.services;
+package org.cats.stock.service;
 
 import org.cats.stock.domain.Receipt;
 import org.cats.stock.domain.ReceiptLine;

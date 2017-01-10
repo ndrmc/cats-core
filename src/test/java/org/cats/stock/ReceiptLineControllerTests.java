@@ -1,10 +1,10 @@
 package org.cats.stock;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.cats.stock.controllers.ReceiptLineController;
+import org.cats.stock.controller.ReceiptLineController;
 import org.cats.stock.domain.Receipt;
 import org.cats.stock.domain.ReceiptLine;
-import org.cats.stock.services.ReceiptService;
+import org.cats.stock.service.ReceiptService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +19,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
