@@ -1,7 +1,9 @@
 package org.cats.stock.services;
 
 import org.cats.stock.domain.Receipt;
+import org.cats.stock.domain.ReceiptLine;
 import org.cats.stock.error.ReceiptServiceException;
+import org.cats.stock.repository.ReceiptLineItemRepository;
 import org.cats.stock.repository.ReceiptRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,12 +18,15 @@ import java.util.List;
 public class ReceiptServiceImpl implements ReceiptService {
 
     private ReceiptRepository receiptRepository;
+    private ReceiptLineItemRepository receiptLineItemRepository;
 
     @Autowired
-    public ReceiptServiceImpl(ReceiptRepository receiptRepository ) {
+    public ReceiptServiceImpl(ReceiptRepository receiptRepository, ReceiptLineItemRepository receiptLineItemRepository ) {
         this.receiptRepository = receiptRepository;
+        this.receiptLineItemRepository = receiptLineItemRepository;
     }
 
+    @Override
     public List<Receipt> getAllReceipts() {
         return receiptRepository.findAll();
     }
@@ -29,6 +34,11 @@ public class ReceiptServiceImpl implements ReceiptService {
     @Override
     public Receipt getReceiptById(Long id) {
         return receiptRepository.findOne(id);
+    }
+
+    @Override
+    public ReceiptLine getReceiptLineById(Long id) {
+        return receiptLineItemRepository.findOne(id);
     }
 
     @Override
@@ -49,5 +59,21 @@ public class ReceiptServiceImpl implements ReceiptService {
     @Override
     public void deleteReceipt(Receipt receipt) {
         receiptRepository.delete(receipt);
+    }
+
+
+    @Override
+    public void deleteReceiptLine(ReceiptLine receiptLine) {
+        receiptLineItemRepository.delete(receiptLine);
+    }
+
+    @Override
+    public List<ReceiptLine> getReceiptLinesForReceipt(Receipt receipt) {
+        return receiptLineItemRepository.findAllByReceiptId(receipt.getId());
+    }
+
+    @Override
+    public ReceiptLine saveReceiptLineItem(ReceiptLine receiptLineItem) {
+        return receiptLineItemRepository.save(receiptLineItem);
     }
 }

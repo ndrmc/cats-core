@@ -1,6 +1,8 @@
 package org.cats.stock;
 
 import org.cats.stock.domain.Receipt;
+import org.cats.stock.domain.ReceiptLine;
+import org.cats.stock.repository.ReceiptLineItemRepository;
 import org.cats.stock.repository.ReceiptRepository;
 import org.cats.stock.services.ReceiptService;
 import org.cats.stock.services.ReceiptServiceImpl;
@@ -35,11 +37,14 @@ public class ReceiptServiceTests {
     @MockBean
     private ReceiptRepository receiptRepository;
 
+    @MockBean
+    private ReceiptLineItemRepository receiptLineItemRepository;
+
     private ReceiptService receiptService;
 
     @Before
     public void setUp() {
-        receiptService = new ReceiptServiceImpl(receiptRepository);
+        receiptService = new ReceiptServiceImpl(receiptRepository, receiptLineItemRepository);
     }
 
 
@@ -73,6 +78,40 @@ public class ReceiptServiceTests {
 
         Assert.assertEquals(id, argument.getValue());
     }
+
+    @Test
+    public void testGetReceiptLinesForReceipt() throws Exception {
+
+        final Integer commodityId = 89;
+
+        ReceiptLine receiptLine = new ReceiptLine();
+        receiptLine.setCommodityId(commodityId);
+
+        when( receiptLineItemRepository.findAllByReceiptId(anyLong()))
+                .thenReturn(Arrays.asList(receiptLine));
+
+        Assert.assertEquals(commodityId, receiptService.getReceiptLinesForReceipt(new Receipt()).get(0).getCommodityId());
+    }
+
+    @Test
+    public void testDeleteReceiptLineDeletesAReceiptLine() throws Exception {
+
+        final Integer commodityId = 89;
+
+        ReceiptLine receiptLine = new ReceiptLine();
+        receiptLine.setCommodityId(commodityId);
+
+        doNothing().when( receiptLineItemRepository).delete(isA(ReceiptLine.class));
+
+        receiptService.deleteReceiptLine(receiptLine);
+
+        ArgumentCaptor<ReceiptLine> argument = ArgumentCaptor.forClass(ReceiptLine.class);
+        verify(receiptLineItemRepository).delete(argument.capture());
+
+        Assert.assertEquals(commodityId, argument.getValue().getCommodityId());
+    }
+
+
 
     @Test
     public void testSaveReceiptPersistsAReceiptObject() throws Exception {

@@ -1,5 +1,6 @@
 package org.cats.stock.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.cats.core.BaseModel;
 
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Entity
 public class Receipt extends BaseModel {
+
     @NotNull
     private String grnNo;
     private Date receivedDate;

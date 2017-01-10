@@ -1,6 +1,7 @@
 package org.cats.stock.services;
 
 import org.cats.stock.domain.Receipt;
+import org.cats.stock.domain.ReceiptLine;
 
 import java.util.List;
 
@@ -13,10 +14,18 @@ public interface ReceiptService {
 
     public Receipt getReceiptById(Long id);
 
+    public ReceiptLine getReceiptLineById(Long id);
+
     public Receipt saveReceipt( Receipt receipt);
 
     public Receipt updateReceipt(Receipt receipt);
 
     public void deleteReceipt( Receipt receipt);
+
+    public void deleteReceiptLine( ReceiptLine receiptLine );
+
+    public List<ReceiptLine> getReceiptLinesForReceipt( Receipt receipt);
+
+    public ReceiptLine saveReceiptLineItem( ReceiptLine receiptLineItem );
 
 }

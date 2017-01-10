@@ -34,7 +34,7 @@ public class BaseModel {
         domainDiff.remove("id");
 
         ObjectMapper mapper = getObjectMapper();
-        ObjectReader updater = mapper   .readerForUpdating(this);
+        ObjectReader updater = mapper.readerForUpdating(this);
 
         try {
             updater.readValue(domainDiff);

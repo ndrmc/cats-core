@@ -146,13 +146,9 @@ public class ReceiptControllerTests  {
     }
 
     @Test
-    public void testDeleteReceiptDeletesAReceiptDocument()  throws Exception  {
+    public void testDeleteReceiptDeletesAReceiptDocument() throws Exception  {
 
         final String grnNumber = "8349238";
-
-        Map receiptPatchObj = new HashMap();
-        receiptPatchObj.put("grnNo", grnNumber);
-
 
         Receipt receipt = new Receipt();
         receipt.setGrnNo(grnNumber);
@@ -162,12 +158,8 @@ public class ReceiptControllerTests  {
 
         doNothing().when(receiptService).deleteReceipt(isA(Receipt.class));
 
-
-        ObjectMapper mapper = new ObjectMapper();
-
         this.mockMvc.perform(delete("/receipts/1")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content( mapper.writeValueAsString(receiptPatchObj))
                 .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isNoContent());
 
