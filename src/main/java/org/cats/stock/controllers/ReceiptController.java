@@ -44,6 +44,18 @@ public class ReceiptController {
         return receiptService.getReceiptById(id);
     }
 
+    @RequestMapping( value = "/hub/{id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE} )
+    @ApiOperation(value = "Finds receipt documents by their Hub Id.")
+    public List<Receipt> getReceiptsByHubId(@PathVariable("id") Integer hubId ) {
+        return receiptService.getReceiptsByHubId(hubId);
+    }
+
+    @RequestMapping( value = "/storeLocation/{id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE} )
+    @ApiOperation(value = "Finds receipt documents by their Store Location Id.")
+    public List<Receipt> getReceiptsByStoreLocationId(@PathVariable("id") Integer storeLocationId ) {
+        return receiptService.getReceiptsByStoreLocationId(storeLocationId);
+    }
+
     @RequestMapping( method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE}, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE} )
     @ApiOperation(value = "Creates a new Receipt document.")
     public Receipt createReceipt(@Validated @RequestBody Receipt receipt) {

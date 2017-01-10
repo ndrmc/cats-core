@@ -14,6 +14,11 @@ public interface ReceiptService {
 
     public Receipt getReceiptById(Long id);
 
+
+    public List<Receipt> getReceiptsByHubId(Integer hubId);
+
+    public List<Receipt> getReceiptsByStoreLocationId(Integer storeLocationId);
+
     public ReceiptLine getReceiptLineById(Long id);
 
     public Receipt saveReceipt( Receipt receipt);

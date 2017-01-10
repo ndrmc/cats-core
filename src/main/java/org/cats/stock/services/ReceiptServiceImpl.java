@@ -37,6 +37,16 @@ public class ReceiptServiceImpl implements ReceiptService {
     }
 
     @Override
+    public List<Receipt> getReceiptsByHubId(Integer hubId) {
+        return receiptRepository.findByHubId(hubId);
+    }
+
+    @Override
+    public List<Receipt> getReceiptsByStoreLocationId(Integer storeLocationId) {
+        return receiptRepository.findByStoreLocationId(storeLocationId);
+    }
+
+    @Override
     public ReceiptLine getReceiptLineById(Long id) {
         return receiptLineItemRepository.findOne(id);
     }
