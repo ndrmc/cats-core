@@ -53,7 +53,7 @@ create table account_transaction (
 /* Table: dispatch                                              */
 /*==============================================================*/
 create table dispatch (
-  id                   int4                 not null,
+  id                   serial                 not null,
   gin                  varchar(100)         not null,
   requisition_no       varchar(100)         not null,
   operation_id         int4                 null,
@@ -245,4 +245,3 @@ references receipt (id);
 alter table unit_of_measure
   add constraint fk_unit_of__reference_uom_cate foreign key (uom_category_id)
 references uom_category (id);
-

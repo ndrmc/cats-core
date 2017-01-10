@@ -90,8 +90,11 @@ gradle-app.setting
 
 # End of https://www.gitignore.io/api/gradle,java,intellij
 
-
+/bin/
+/.classpath
+/.project
 
 .idea/
 *.iml
 .DS_Store
+
