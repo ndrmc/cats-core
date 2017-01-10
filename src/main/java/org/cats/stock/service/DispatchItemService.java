@@ -17,56 +17,56 @@ import javassist.NotFoundException;
 public class DispatchItemService {
 
 	@Autowired
-	private DispatchItemRepository repository;
+	private DispatchItemRepository dispatchItemRepository;
 	
 	
 	public DispatchItemRepository getRepository() {
-		return repository;
+		return dispatchItemRepository;
 	}
 
 	public void setRepository(DispatchItemRepository repository) {
-		this.repository = repository;
+		this.dispatchItemRepository = repository;
 	}
 
 	@Transactional
 	public DispatchItem findById(@NotNull Long dispatchItemId) {
-		return repository.findOne(dispatchItemId);
+		return dispatchItemRepository.findOne(dispatchItemId);
 	}	
 
 	@Transactional
 	public DispatchItem save(@NotNull @Valid final DispatchItem dispatchItem) {
-		return repository.save(dispatchItem);
+		return dispatchItemRepository.save(dispatchItem);
 	}
 
 	@Transactional
 	public DispatchItem update(@NotNull @Valid final DispatchItem dispatchItem) throws NotFoundException {
-		DispatchItem savedItem=repository.findOne(dispatchItem.getId());
+		DispatchItem savedItem=dispatchItemRepository.findOne(dispatchItem.getId());
 		if(savedItem==null)
 			throw new NotFoundException("Dispatch item with id "+dispatchItem.getId()+"not found");
-		return repository.save(dispatchItem);
+		return dispatchItemRepository.save(dispatchItem);
 	}
 
 	@Transactional
 	public void delete(@NotNull Long dispatchItemId) {
-		DispatchItem dispatchItem=repository.findOne(dispatchItemId);
+		DispatchItem dispatchItem=dispatchItemRepository.findOne(dispatchItemId);
 		if(dispatchItem!=null){
-			repository.delete(dispatchItemId);
+			dispatchItemRepository.delete(dispatchItemId);
 		}
 	}
 
 	@Transactional(readOnly = true)
 	public List<DispatchItem> getList() {
-		return repository.findAll();
+		return dispatchItemRepository.findAll();
 	}
 	
 	@Transactional(readOnly = true)
 	public List<DispatchItem> getListbyDispatch(Integer dispatchId) {
-		return repository.findByDispatchId(dispatchId);
+		return dispatchItemRepository.findByDispatchId(dispatchId);
 	}
 
 	@Transactional(readOnly = true)
 	public List<DispatchItem> getListbyProject(Integer projectId) {
-		return repository.findByProjectId(projectId);
+		return dispatchItemRepository.findByProjectId(projectId);
 	}	
 
 }
