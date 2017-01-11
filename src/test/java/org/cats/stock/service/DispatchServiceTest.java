@@ -2,37 +2,28 @@ package org.cats.stock.service;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.swing.text.html.parser.Entity;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.ParseException;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.cats.stock.domain.Dispatch;
 import org.cats.stock.repository.DispatchRepository;
 import org.cats.stock.util.DispatchTestUtil;
+import org.cats.util.URLBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.mock.http.client.MockClientHttpResponse;
+import org.springframework.web.client.RestTemplate;
 
 import javassist.NotFoundException;
+import java.net.URI;
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class DispatchServiceTest {
@@ -40,21 +31,24 @@ public class DispatchServiceTest {
 	@Mock
 	private DispatchRepository dispatchRepository;
 
-	private DispatchService dispatchService;
+	@Mock
+	private URLBuilder urlBuilder;
 	
 	@Mock 
-	private CloseableHttpClient httpClinet;
-
-	@Mock
-	CloseableHttpResponse mockHttpResponse;
+	RestTemplate restTemplate;
+	
+	private DispatchService dispatchService ;	
 	
 	 
-	private static String fdp_ids_response= "{[1,2,3]}";
+	private static List<Integer> fdp_ids_response= new ArrayList<>();
+	
 
 	@Before
-	public void setUp() throws Exception {
-		dispatchService = new DispatchService();	
-		dispatchService.setRepository(dispatchRepository);
+	public void setUp() {
+		dispatchService = new DispatchService(dispatchRepository);
+		dispatchService.setUrlBuilder(urlBuilder);
+		dispatchService.setRestTemplate(restTemplate);
+		
 	}
 
 	private Dispatch stubRepositoryToReturnExistingDispatch() {
@@ -71,22 +65,18 @@ public class DispatchServiceTest {
 		return dispatch;
     }
 	
-	private void stubHttpClientResponse() {
+	private void stubApiReponse() {
+		when(dispatchRepository.findByFdpIdIn(any())).thenReturn(DispatchTestUtil.createDispatchList(3));	
+     
+		List<Integer> fdpIds = new ArrayList<>(2);
+		fdpIds.add(Integer.parseInt("1"));
+		fdpIds.add(Integer.parseInt("2"));
 		
-		when(dispatchRepository.findByFdpIdIn(any())).thenReturn(DispatchTestUtil.createDispatchList(3));
-		
-		final HttpEntity mockHttpEntity = mock(HttpEntity.class);
-		when(mockHttpResponse.getEntity()).thenReturn(mockHttpEntity);
-		
-		final ByteArrayInputStream responseStream = new ByteArrayInputStream(new String(fdp_ids_response).getBytes());
-	    try {
-			when(mockHttpEntity.getContent()).thenReturn(responseStream);
-			when(httpClinet.execute(any())).thenReturn(mockHttpResponse);
-		} catch (UnsupportedOperationException | IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} 
-	}
+       when(restTemplate.getForObject(any(URI.class), any())).thenReturn(fdpIds );
+      
+    }
+	
+	
 
 	@Test
 	public void testFindById() {
@@ -183,19 +173,14 @@ public class DispatchServiceTest {
 
 	@Test
 	public void testGetListbyRegion() {
-		stubHttpClientResponse();
+		
+		stubApiReponse();
 		List<Dispatch> dispatches = dispatchService.getListbyRegion(Integer.parseInt("1"));
 		
 		assertNotNull(dispatches);
 		assertEquals(3, dispatches.size());
-		verify(dispatchRepository, times(1)).findByFdpIdIn(any());
-		
-		try {
-			assertEquals(EntityUtils.toString(mockHttpResponse.getEntity(), "UTF-8"),fdp_ids_response);
-		} catch (ParseException | IOException e) {
-			fail();
-			e.printStackTrace();
-		}
+		verify(restTemplate,times(1)).getForObject(any(URI.class), any());
+		verify(dispatchRepository, times(1)).findByFdpIdIn(any());		
 		
 	}
 
