@@ -17,7 +17,7 @@ public class Posting extends BaseModel {
 
     private Long documentId;
 
-    @Enumerated(value = EnumType.STRING)
+    @Convert(converter = DocumentType.Converter.class)
     private DocumentType documentType;
 
     private Boolean posted;
