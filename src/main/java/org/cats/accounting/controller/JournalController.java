@@ -3,6 +3,7 @@ package org.cats.accounting.controller;
 import java.util.List;
 
 import org.cats.accounting.domain.Account;
+import org.cats.accounting.domain.Journal;
 import org.cats.accounting.service.JournalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,7 @@ public class JournalController {
 
 	@ApiOperation(value = "Returns all journals" )
 	@RequestMapping(value = "/journal", method = RequestMethod.GET)
-	public List<Account> listAccounts() {
+	public List<Journal> listJournals() {
 		return journalService.getList();
 	}
 

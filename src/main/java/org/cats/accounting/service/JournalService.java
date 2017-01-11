@@ -3,6 +3,7 @@ package org.cats.accounting.service;
 import java.util.List;
 
 import org.cats.accounting.domain.Account;
+import org.cats.accounting.domain.Journal;
 import org.cats.accounting.repository.AccountRepository;
 import org.cats.accounting.repository.JournalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class JournalService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Account> getList() {
+	public List<Journal> getList() {
 		return journalRepository.findAll();
 	}
 }
