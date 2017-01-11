@@ -4,7 +4,7 @@ import org.cats.stock.domain.Receipt;
 import org.cats.stock.domain.ReceiptLine;
 import org.cats.stock.repository.ReceiptLineItemRepository;
 import org.cats.stock.repository.ReceiptRepository;
-import org.cats.stock.service.ReceiptService;
+import org.cats.stock.service.ReceiptServiceImpl;
 import org.cats.stock.service.ReceiptServiceImpl;
 import org.junit.Assert;
 import org.junit.Before;
@@ -38,7 +38,7 @@ public class ReceiptServiceTests {
     @MockBean
     private ReceiptLineItemRepository receiptLineItemRepository;
 
-    private ReceiptService receiptService;
+    private ReceiptServiceImpl receiptService;
 
     @Before
     public void setUp() {
@@ -80,7 +80,7 @@ public class ReceiptServiceTests {
     @Test
     public void testGetReceiptLinesForReceipt() throws Exception {
 
-        final Integer commodityId = 89;
+        final Long commodityId = 89l;
 
         ReceiptLine receiptLine = new ReceiptLine();
         receiptLine.setCommodityId(commodityId);
@@ -94,7 +94,7 @@ public class ReceiptServiceTests {
     @Test
     public void testDeleteReceiptLineDeletesAReceiptLine() throws Exception {
 
-        final Integer commodityId = 89;
+        final Long commodityId = 89l;
 
         ReceiptLine receiptLine = new ReceiptLine();
         receiptLine.setCommodityId(commodityId);

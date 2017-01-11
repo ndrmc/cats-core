@@ -7,15 +7,15 @@ import java.util.Date;
 import javax.persistence.Entity;
 
 @Entity
-public class Operation extends BaseModel{
+public class Operation extends BaseModel {
 	  
-	private Integer programId;
-	private Integer planId;
+	private Long programId;
+	private Long planId;
 	private String name;
 	private String description;
 	private String year;
-	private Integer round;
-	private Integer rationId;
+	private Long round;
+	private Long rationId;
 	private Integer operationMonth;
 	private Date expectedStart;
 	private Date plannedEnd;
@@ -23,16 +23,16 @@ public class Operation extends BaseModel{
 	private Date actualEnd;
 	private String status;
 	
-	public Integer getProgramId() {
+	public Long getProgramId() {
 		return programId;
 	}
-	public void setProgramId(Integer programId) {
+	public void setProgramId(Long programId) {
 		this.programId = programId;
 	}
-	public Integer getPlanId() {
+	public Long getPlanId() {
 		return planId;
 	}
-	public void setPlanId(Integer planId) {
+	public void setPlanId(Long planId) {
 		this.planId = planId;
 	}
 	public String getName() {
@@ -53,16 +53,16 @@ public class Operation extends BaseModel{
 	public void setYear(String year) {
 		this.year = year;
 	}
-	public Integer getRound() {
+	public Long getRound() {
 		return round;
 	}
-	public void setRound(Integer round) {
+	public void setRound(Long round) {
 		this.round = round;
 	}
-	public Integer getRationId() {
+	public Long getRationId() {
 		return rationId;
 	}
-	public void setRationId(Integer rationId) {
+	public void setRationId(Long rationId) {
 		this.rationId = rationId;
 	}
 	public Integer getOperationMonth() {

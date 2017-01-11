@@ -15,27 +15,36 @@ public class Receipt extends BaseModel {
     @NotNull
     private String grnNo;
     private Date receivedDate;
-    private Integer hubId;
-    private Integer storeLocationId;
-    private Integer supplierId;
-    private Integer transporterId;
+    private Long hubId;
+    private Long storeLocationId;
+    private Long supplierId;
+    private Long transporterId;
     private String plateNo;
     private String trailerPlateNo;
     private String weightBridgeTicketNo;
     private Float weightBeforeUnloading;
-    private Float weighAfterUnloading;
+    private Float weightAfterUnloading;
     private String storekeeperName;
     private String waybillNo;
     private String purchaseRequestNo;
     private String purchaseOrderNo;
     private String invoiceNo;
-    private Integer commoditySourceId;
-    private Integer status;
+    private Long commoditySourceId;
+    private Long status;
+    private Long warehouseId;
 
     @OneToMany(mappedBy = "receipt")
     private List<ReceiptLine> receiptLines;
 
     public Receipt(){}
+
+    public Long getWarehouseId() {
+        return warehouseId;
+    }
+
+    public void setWarehouseId(Long warehouseId) {
+        this.warehouseId = warehouseId;
+    }
 
 
     public String getGrnNo() {
@@ -54,35 +63,35 @@ public class Receipt extends BaseModel {
         this.receivedDate = receivedDate;
     }
 
-    public Integer getHubId() {
+    public Long getHubId() {
         return hubId;
     }
 
-    public void setHubId(Integer hubId) {
+    public void setHubId(Long hubId) {
         this.hubId = hubId;
     }
 
-    public Integer getStoreLocationId() {
+    public Long getStoreLocationId() {
         return storeLocationId;
     }
 
-    public void setStoreLocationId(Integer storeLocationId) {
+    public void setStoreLocationId(Long storeLocationId) {
         this.storeLocationId = storeLocationId;
     }
 
-    public Integer getSupplierId() {
+    public Long getSupplierId() {
         return supplierId;
     }
 
-    public void setSupplierId(Integer supplierId) {
+    public void setSupplierId(Long supplierId) {
         this.supplierId = supplierId;
     }
 
-    public Integer getTransporterId() {
+    public Long getTransporterId() {
         return transporterId;
     }
 
-    public void setTransporterId(Integer transporterId) {
+    public void setTransporterId(Long transporterId) {
         this.transporterId = transporterId;
     }
 
@@ -118,12 +127,12 @@ public class Receipt extends BaseModel {
         this.weightBeforeUnloading = weightBeforeUnloading;
     }
 
-    public Float getWeighAfterUnloading() {
-        return weighAfterUnloading;
+    public Float getWeightAfterUnloading() {
+        return weightAfterUnloading;
     }
 
-    public void setWeighAfterUnloading(Float weighAfterUnloading) {
-        this.weighAfterUnloading = weighAfterUnloading;
+    public void setWeightAfterUnloading(Float weightAfterUnloading) {
+        this.weightAfterUnloading = weightAfterUnloading;
     }
 
     public String getStorekeeperName() {
@@ -166,19 +175,19 @@ public class Receipt extends BaseModel {
         this.invoiceNo = invoiceNo;
     }
 
-    public Integer getCommoditySourceId() {
+    public Long getCommoditySourceId() {
         return commoditySourceId;
     }
 
-    public void setCommoditySourceId(Integer commoditySourceId) {
+    public void setCommoditySourceId(Long commoditySourceId) {
         this.commoditySourceId = commoditySourceId;
     }
 
-    public Integer getStatus() {
+    public Long getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(Long status) {
         this.status = status;
     }
 

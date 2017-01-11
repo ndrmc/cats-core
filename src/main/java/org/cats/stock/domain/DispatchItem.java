@@ -11,13 +11,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 public class DispatchItem extends BaseModel {
 
-	private Integer commodityId; 
-	private Integer dispatchId; 
+	private Long commodityId;
+	private Long dispatchId;
 	private Float quantity; 
-	private Integer uomId;
-	private Integer projectId;  
-	private Integer batchId;   
-	private Integer stockMoveId;
+	private Long uomId;
+	private Long projectId;
+	private Long batchId;
+	private Long stockMoveId;
 	private String description; 
 
 	@ManyToOne
@@ -25,19 +25,19 @@ public class DispatchItem extends BaseModel {
 	@JsonIgnore
 	private Dispatch dispatch;
 
-	public Integer getCommodityId() {
+	public Long getCommodityId() {
 		return commodityId;
 	}
 
-	public void setCommodityId(Integer commodityId) {
+	public void setCommodityId(Long commodityId) {
 		this.commodityId = commodityId;
 	}
 	
-	public Integer getDispatchId() {
+	public Long getDispatchId() {
 		return dispatchId;
 	}
 
-	public void setDispatchId(Integer dispatchId) {
+	public void setDispatchId(Long dispatchId) {
 		this.dispatchId = dispatchId;
 	}
 
@@ -49,35 +49,35 @@ public class DispatchItem extends BaseModel {
 		this.quantity = quantity;
 	}
 
-	public Integer getUomId() {
+	public Long getUomId() {
 		return uomId;
 	}
 
-	public void setUomId(Integer uomId) {
+	public void setUomId(Long uomId) {
 		this.uomId = uomId;
 	}
 
-	public Integer getProjectId() {
+	public Long getProjectId() {
 		return projectId;
 	}
 
-	public void setProjectId(Integer projectId) {
+	public void setProjectId(Long projectId) {
 		this.projectId = projectId;
 	}
 
-	public Integer getBatchId() {
+	public Long getBatchId() {
 		return batchId;
 	}
 
-	public void setBatchId(Integer batchId) {
+	public void setBatchId(Long batchId) {
 		this.batchId = batchId;
 	}
 
-	public Integer getStockMoveId() {
+	public Long getStockMoveId() {
 		return stockMoveId;
 	}
 
-	public void setStockMoveId(Integer stockMoveId) {
+	public void setStockMoveId(Long stockMoveId) {
 		this.stockMoveId = stockMoveId;
 	}
 

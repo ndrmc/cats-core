@@ -1,7 +1,6 @@
 package org.cats.stock.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.cats.core.BaseModel;
 
 import javax.persistence.Entity;
@@ -9,21 +8,21 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class ReceiptLine extends BaseModel {
-    private Integer commodityId;
+    private Long commodityId;
     private Float amount;
-    private Integer unitOfMeasureId;
-    private Integer projectId;
-    private Integer batchId;
+    private Long uomId;
+    private Long projectId;
+    private Long batchId;
 
     @ManyToOne
     @JsonIgnore
     private Receipt receipt;
 
-    public Integer getCommodityId() {
+    public Long getCommodityId() {
         return commodityId;
     }
 
-    public void setCommodityId(Integer commodityId) {
+    public void setCommodityId(Long commodityId) {
         this.commodityId = commodityId;
     }
 
@@ -35,27 +34,27 @@ public class ReceiptLine extends BaseModel {
         this.amount = amount;
     }
 
-    public Integer getUnitOfMeasureId() {
-        return unitOfMeasureId;
+    public Long getUomId() {
+        return uomId;
     }
 
-    public void setUnitOfMeasureId(Integer unitOfMeasureId) {
-        this.unitOfMeasureId = unitOfMeasureId;
+    public void setUomId(Long uomId) {
+        this.uomId = uomId;
     }
 
-    public Integer getProjectId() {
+    public Long getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(Integer projectId) {
+    public void setProjectId(Long projectId) {
         this.projectId = projectId;
     }
 
-    public Integer getBatchId() {
+    public Long getBatchId() {
         return batchId;
     }
 
-    public void setBatchId(Integer batchId) {
+    public void setBatchId(Long batchId) {
         this.batchId = batchId;
     }
 

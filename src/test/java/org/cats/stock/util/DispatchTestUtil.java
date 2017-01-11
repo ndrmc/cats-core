@@ -11,7 +11,7 @@ public class DispatchTestUtil {
 	public static Dispatch createDispatch() {
 		Dispatch testDispatch= new Dispatch();
 		testDispatch.setGin("123");
-		testDispatch.setOperationId(1);
+		testDispatch.setOperationId(1l);
 		testDispatch.setRequisitionNo("12345");
 		return testDispatch;
 	}

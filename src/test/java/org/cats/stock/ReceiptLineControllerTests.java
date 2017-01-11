@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cats.stock.controller.ReceiptLineController;
 import org.cats.stock.domain.Receipt;
 import org.cats.stock.domain.ReceiptLine;
-import org.cats.stock.service.ReceiptService;
+import org.cats.stock.service.ReceiptServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +39,7 @@ public class ReceiptLineControllerTests {
     private MockMvc mockMvc;
 
     @MockBean
-    private ReceiptService receiptService;
+    private ReceiptServiceImpl receiptService;
 
     @Before
     public void setup() {
@@ -71,7 +71,7 @@ public class ReceiptLineControllerTests {
 
 
         ReceiptLine receiptLine = new ReceiptLine();
-        receiptLine.setCommodityId(2);
+        receiptLine.setCommodityId(2l);
 
         when( receiptService.getReceiptLineById(anyLong()) )
                 .thenReturn(receiptLine);
@@ -86,7 +86,7 @@ public class ReceiptLineControllerTests {
     @Test
     public void testCreateReceiptLine() throws Exception {
 
-        final Integer commodityId = 34;
+        final Long commodityId = 34l;
 
         Map receiptLineObj = new HashMap();
         receiptLineObj.put("commodityId", commodityId);
@@ -120,8 +120,8 @@ public class ReceiptLineControllerTests {
     @Test
     public void testUpdateReceiptLinePatchesAnExistingReceiptLineDocument()  throws Exception  {
 
-        final Integer originalCommodityId = 32;
-        final Integer newCommodityId = 35;
+        final Long originalCommodityId = 32l;
+        final Long newCommodityId = 35l;
 
         Map receiptLinePatchObj = new HashMap();
         receiptLinePatchObj.put("commodityId", newCommodityId);
@@ -158,7 +158,7 @@ public class ReceiptLineControllerTests {
     @Test
     public void testDeleteReceiptLineDeletesAReceiptLineDocument()  throws Exception  {
 
-        final Integer commodityId = 990;
+        final Long commodityId = 990l;
 
 
         ReceiptLine receiptLine = new ReceiptLine();
