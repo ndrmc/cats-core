@@ -5,7 +5,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.cats.stock.domain.Receipt;
 import org.cats.stock.exception.ReceiptControllerException;
-import org.cats.stock.service.ReceiptService;
+import org.cats.stock.service.ReceiptServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,11 +24,11 @@ import java.util.List;
 @Api(value = "receipts", description = "Manages hub receipt (GRN) records")
 public class ReceiptController {
 
-    private final ReceiptService receiptService;
+    private final ReceiptServiceImpl receiptService;
 
 
     @Autowired
-    public ReceiptController(ReceiptService receiptService) {
+    public ReceiptController(ReceiptServiceImpl receiptService) {
         this.receiptService = receiptService;
     }
 

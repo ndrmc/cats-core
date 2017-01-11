@@ -19,19 +19,17 @@ public class Dispatch extends BaseModel {
 	@NotNull
 	private String gin;
 	private String requisitionNo;
-	private Integer operationId;
-	private Integer periodMonth;
-	private Integer periodRound;
-	private Integer fdpId;
-	private Integer transportOrderId;
+	private Long operationId;
+	private Long periodMonth;
+	private Long periodRound;
+	private Long fdpId;
+	private Long transportOrderId;
 	private String driver;
 	private String plateNo;
-	private Date createdDate;
 	private Date  dispatchedDate;
-	private Integer createdBy  ;
-	private Integer dispatchedBy;
+	private Long createdBy  ;
+	private Long dispatchedBy;
 	private String  remark;
-	private Date lastUpdated;
 
 	@OneToMany(mappedBy = "dispatch")
 	private List<DispatchItem> dispatchItems;
@@ -57,43 +55,43 @@ public class Dispatch extends BaseModel {
 		this.requisitionNo = requisitionNo;
 	}
 
-	public Integer getOperationId() {
+	public Long getOperationId() {
 		return operationId;
 	}
 
-	public void setOperationId(Integer operationId) {
+	public void setOperationId(Long operationId) {
 		this.operationId = operationId;
 	}
 
-	public Integer getPeriodMonth() {
+	public Long getPeriodMonth() {
 		return periodMonth;
 	}
 
-	public void setPeriodMonth(Integer periodMonth) {
+	public void setPeriodMonth(Long periodMonth) {
 		this.periodMonth = periodMonth;
 	}
 
-	public Integer getPeriodRound() {
+	public Long getPeriodRound() {
 		return periodRound;
 	}
 
-	public void setPeriodRound(Integer periodRound) {
+	public void setPeriodRound(Long periodRound) {
 		this.periodRound = periodRound;
 	}	
 
-	public Integer getFdpId() {
+	public Long getFdpId() {
 		return fdpId;
 	}
 
-	public void setFdpId(Integer fdpId) {
+	public void setFdpId(Long fdpId) {
 		this.fdpId = fdpId;
 	}
 
-	public Integer getTransportOrderId() {
+	public Long getTransportOrderId() {
 		return transportOrderId;
 	}
 
-	public void setTransportOrderId(Integer transportOrderId) {
+	public void setTransportOrderId(Long transportOrderId) {
 		this.transportOrderId = transportOrderId;
 	}
 
@@ -113,14 +111,6 @@ public class Dispatch extends BaseModel {
 		this.plateNo = plateNo;
 	}
 
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
-
 	public Date getDispatchedDate() {
 		return dispatchedDate;
 	}
@@ -129,19 +119,19 @@ public class Dispatch extends BaseModel {
 		this.dispatchedDate = dispatchedDate;
 	}
 
-	public Integer getCreatedBy() {
+	public Long getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(Integer createdBy) {
+	public void setCreatedBy(Long createdBy) {
 		this.createdBy = createdBy;
 	}
 
-	public Integer getDispatchedBy() {
+	public Long getDispatchedBy() {
 		return dispatchedBy;
 	}
 
-	public void setDispatchedBy(Integer dispatchedBy) {
+	public void setDispatchedBy(Long dispatchedBy) {
 		this.dispatchedBy = dispatchedBy;
 	}
 
@@ -151,14 +141,6 @@ public class Dispatch extends BaseModel {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
-	}
-
-	public Date getLastUpdated() {
-		return lastUpdated;
-	}
-
-	public void setLastUpdated(Date lastUpdated) {
-		this.lastUpdated = lastUpdated;
 	}
 
 	public List<DispatchItem> getDispatchItems() {

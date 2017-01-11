@@ -1,24 +1,45 @@
 package org.cats.accounting.domain;
 
 import org.cats.core.BaseModel;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.cats.stock.enums.DocumentType;
 
-import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
+import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
+/**
+ * Created by alexander on 1/11/17.
+ */
 @Entity
 public class Posting extends BaseModel {
 
-    @NotNull
-    @NotEmpty
     private UUID postingCode;
-    private String documentType;
-    private Integer documentId;
-    private Date createdDate;
-    private String createdBy;
+
+    private Long documentId;
+
+    @Enumerated(value = EnumType.STRING)
+    private DocumentType documentType;
+
     private Boolean posted;
+
+
+    @OneToMany(mappedBy = "posting")
+    List<PostingItem> postingItems;
+
+    public List<PostingItem> getPostingItems() {
+        return postingItems;
+    }
+
+    public void setPostingItems(List<PostingItem> postingItems) {
+        this.postingItems = postingItems;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+
+        postingCode = UUID.randomUUID();
+    }
+
 
     public UUID getPostingCode() {
         return postingCode;
@@ -28,36 +49,20 @@ public class Posting extends BaseModel {
         this.postingCode = postingCode;
     }
 
-    public String getDocumentType() {
-        return documentType;
-    }
-
-    public void setDocumentType(String documentType) {
-        this.documentType = documentType;
-    }
-
-    public Integer getDocumentId() {
+    public Long getDocumentId() {
         return documentId;
     }
 
-    public void setDocumentId(Integer documentId) {
+    public void setDocumentId(Long documentId) {
         this.documentId = documentId;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
+    public DocumentType getDocumentType() {
+        return documentType;
     }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
+    public void setDocumentType(DocumentType documentType) {
+        this.documentType = documentType;
     }
 
     public Boolean getPosted() {

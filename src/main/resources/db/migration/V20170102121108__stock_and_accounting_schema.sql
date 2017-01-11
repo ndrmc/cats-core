@@ -14,21 +14,43 @@ create table account (
   name                 varchar(200)         null,
   description          varchar(200)         null,
   account_type         varchar(10)          null,
+
+  created_date         timestamp with time zone                 null,
+  updated_date         timestamp with time zone                 null,
+
   constraint pk_account primary key (id)
 );
 
 /*==============================================================*/
-/* Table: account_transaction                                   */
+
+
 /*==============================================================*/
-create table account_transaction (
+/* Table: posting                                               */
+/*==============================================================*/
+create table posting (
+  id                   serial               not null,
+  posting_code         UUID                 not null,
+  document_type        varchar(100)         null,
+  document_id          int4                 null,
+  posted               bool                 null,
+
+  created_date         timestamp with time zone                 null,
+  updated_date         timestamp with time zone                 null,
+
+  constraint pk_posting primary key (id)
+);
+
+
+/* Table: posting_item                                   */
+/*==============================================================*/
+create table posting_item (
   id                   int4                 not null,
-  transaction_code     uuid                 not null,
-  posting_code         uuid                 not null,
+  posting_item_code     uuid                 not null,
   posting_id           int4                 null,
   account_id           int4                 null,
   journal_id           int4                 null,
   donor_id             int4                 null,
-  transaction_type     char(1)              null,
+  posting_item_type    VARCHAR(20)              null,
   hub_id               int4                 null,
   warehouse_id         int4                 null,
   store_no             int4                 null,
@@ -39,14 +61,17 @@ create table account_transaction (
   commodity_id         int4                 null,
   commodity_category_id int4                 null,
   quantity             decimal              null,
-  uom_id               int4                 null,
-  transaction_date     date                 null,
   operation_id         int4                 null,
   region_id            int4                 null,
   zone_id              int4                 null,
   woreda_id            int4                 null,
   fdp_id               int4                 null,
-  constraint pk_account_transaction primary key (id)
+
+
+  created_date         timestamp with time zone                 null,
+  updated_date         timestamp with time zone                 null,
+
+  constraint pk_posting_item primary key (id)
 );
 
 /*==============================================================*/
@@ -63,12 +88,14 @@ create table dispatch (
   transport_order_id   int4                 null,
   driver               varchar(100)         null,
   plate_no             varchar(100)         null,
-  created_date         date                 null,
-  dispatched_date      date                 null,
+  dispatched_date      timestamp with time zone                 null,
   created_by           int4                 null,
   dispatched_by        int4                 null,
   remark               text                 null,
-  last_updated         date                 null,
+
+  created_date         timestamp with time zone                 null,
+  updated_date         timestamp with time zone                 null,
+
   constraint pk_dispatch primary key (id)
 );
 
@@ -85,6 +112,11 @@ create table dispatch_item (
   batch_id             int4                 null,
   stock_move_id        int4                 null,
   description          text                 null,
+
+
+  created_date         timestamp with time zone                 null,
+  updated_date         timestamp with time zone                 null,
+
   constraint pk_dispatch_item primary key (id)
 );
 
@@ -95,6 +127,10 @@ create table journal (
   id                   serial not null,
   name                 varchar(200)         null,
   description          varchar(200)         null,
+
+  created_date         timestamp with time zone                 null,
+  updated_date         timestamp with time zone                 null,
+
   constraint pk_journal primary key (id)
 );
 
@@ -111,11 +147,15 @@ create table operation (
   round                int4                 null,
   ration_id            int4                 null,
   operation_month      int4                 null,
-  expected_start       date                 null,
-  planned_end          date                 null,
-  actual_start         date                 null,
-  actual_end           date                 null,
+  expected_start       timestamp with time zone                 null,
+  planned_end          timestamp with time zone                 null,
+  actual_start         timestamp with time zone                 null,
+  actual_end           timestamp with time zone                 null,
   status               varchar(10)          null,
+
+  created_date         timestamp with time zone                 null,
+  updated_date         timestamp with time zone                 null,
+
   constraint pk_operation primary key (id)
 );
 
@@ -126,54 +166,50 @@ create table operation_region (
   id                   int4                 not null,
   operation_id         int4                 not null,
   region_id            int4                 not null,
+
+  created_date         timestamp with time zone                 null,
+  updated_date         timestamp with time zone                 null,
+
   constraint pk_operation_region primary key (id)
 );
 
-/*==============================================================*/
-/* Table: posting                                               */
-/*==============================================================*/
-create table posting (
-  id                   serial not null,
-  posting_code         UUID         not null,
-  document_type        varchar(100)         null,
-  document_id          int4                 null,
-  created_date         date                 null,
-  created_by           varchar(100)         null,
-  posted               bool                 null,
-  constraint pk_posting primary key (id)
-);
 
 /*==============================================================*/
 /* Table: receipt                                               */
 /*==============================================================*/
 create table receipt (
   id                   serial not null,
-  grn                  varchar(200)         null,
-  receive_date         date                 null,
+  grn_no                  varchar(200)         null,
+  received_date         timestamp with time zone                 null,
   hub_id               int4                 null,
   warehouse_id         int4                 null,
   delivered_by         varchar(200)         null,
   supplier_id          int4                 null,
-  transported_by       varchar(200)         null,
+  transporter_id       INT4         null,
   plate_no             varchar(200)         null,
-  plate_no_trailer     varchar(200)         null,
+  trailer_plate_no     varchar(200)         null,
   weight_bridge_ticket_no varchar(200)         null,
   weight_before_unloading decimal              null,
   weight_after_unloading decimal              null,
   storekeeper_name     varchar(200)         null,
   waybill_no           varchar(200)         null,
-  purchase_req_no      varchar(200)         null,
+  purchase_request_no  varchar(200)     null,
   purchase_order_no    varchar(200)         null,
   invoice_no           varchar(200)         null,
   commodity_source_id  int4                 null,
+  store_location_id  int4                   null,
   status               int4                 null,
+
+  created_date         timestamp with time zone                 null,
+  updated_date         timestamp with time zone                 null,
+
   constraint pk_receipt primary key (id)
 );
 
 /*==============================================================*/
-/* Table: receipt_item                                          */
+/* Table: receipt_line                                          */
 /*==============================================================*/
-create table receipt_item (
+create table receipt_line (
   id                   serial not null,
   receipt_id           int4                 null,
   commodity_id         int4                 null,
@@ -181,7 +217,11 @@ create table receipt_item (
   batch_id             int4                 null,
   uom_id               int4                 null,
   amount               decimal              null,
-  constraint pk_receipt_item primary key (id)
+
+  created_date         timestamp with time zone                 null,
+  updated_date         timestamp with time zone                 null,
+
+  constraint pk_receipt_line primary key (id)
 );
 
 /*==============================================================*/
@@ -194,6 +234,10 @@ create table unit_of_measure (
   ratio                decimal              not null,
   name                 varchar(200)         not null,
   code                 varchar(4)           null,
+
+  created_date         timestamp with time zone                 null,
+  updated_date         timestamp with time zone                 null,
+
   constraint pk_unit_of_measure primary key (id)
 );
 
@@ -203,23 +247,28 @@ create table unit_of_measure (
 create table uom_category (
   id                   serial not null,
   name                 varchar(200)         null,
+
+
+  created_date         timestamp with time zone                 null,
+  updated_date         timestamp with time zone                 null,
+
   constraint pk_uom_category primary key (id)
 );
 
 comment on table uom_category is
 'Unit, weight, volume, length';
 
-alter table account_transaction
+alter table posting_item
   add constraint fk_account__reference_journal foreign key (journal_id)
 references journal (id)
 on delete restrict on update restrict;
 
-alter table account_transaction
+alter table posting_item
   add constraint fk_account__reference_posting foreign key (posting_id)
 references posting (id)
 on delete restrict on update restrict;
 
-alter table account_transaction
+alter table posting_item
   add constraint fk_account__reference_account foreign key (account_id)
 references account (id)
 on delete restrict on update restrict;
@@ -238,7 +287,7 @@ alter table operation_region
 references operation (id)
 on delete restrict on update restrict;
 
-alter table receipt_item
+alter table receipt_line
   add constraint fk_receipt__ref_recip_receipt foreign key (receipt_id)
 references receipt (id);
 
