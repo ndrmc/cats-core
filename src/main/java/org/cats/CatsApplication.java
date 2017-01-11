@@ -1,14 +1,13 @@
 package org.cats;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.async.DeferredResult;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -24,8 +23,6 @@ import springfox.documentation.swagger.web.SecurityConfiguration;
 import springfox.documentation.swagger.web.UiConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -35,8 +32,6 @@ import static springfox.documentation.schema.AlternateTypeRules.newRule;
 @EnableSwagger2
 @SpringBootApplication
 public class CatsApplication {
-
-	private static URI catsV1URI=URI.create("https://jsonplaceholder.typicode.com/posts");
 
 	public static void main(String[] args) {
 		SpringApplication.run(CatsApplication.class, args);
@@ -112,17 +107,11 @@ public class CatsApplication {
                 false,        // enableJsonEditor      => true | false
                 true);        // showRequestHeaders    => true | false
     }
+    
 
-
-	public static void setCatsV1URI(String uriStr ) throws URISyntaxException {
-		
-		catsV1URI = new URI(uriStr);
+	@Bean
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
 	}
-
-
-	public static URI getCatsV1URI() {
-		return catsV1URI;
-	}
-
 
 }

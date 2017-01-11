@@ -14,6 +14,7 @@ import org.cats.stock.util.DispatchTestUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -25,14 +26,9 @@ public class DispatchItemServiceTest {
 	@Mock
 	DispatchItemRepository repository;
 	
+	@InjectMocks
 	DispatchItemService service;
 	
-
-	@Before
-	public void setUp() throws Exception {
-		service = new DispatchItemService();
-		service.setRepository(repository);
-	}
 
 	private DispatchItem stubRepoToReturnStoredDispatchItem() {
 		final DispatchItem dispatchItem = DispatchTestUtil.createDispatchItem();
