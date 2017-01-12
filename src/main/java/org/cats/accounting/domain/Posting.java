@@ -15,10 +15,11 @@ public class Posting extends BaseModel {
 
     private UUID postingCode;
 
-    private Long documentId;
 
     @Convert(converter = DocumentType.Converter.class)
     private DocumentType documentType;
+
+    private Long documentId;
 
     private Boolean posted;
 

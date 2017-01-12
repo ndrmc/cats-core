@@ -7,7 +7,7 @@ import javax.persistence.Converter;
  * Created by alexander on 1/11/17.
  */
 public enum DocumentType {
-    D("D");
+    RECEIPT("Receipt"),DISPATCH("Dispatch");
 
     DocumentType(String code ){
         this.code = code;
@@ -21,7 +21,7 @@ public enum DocumentType {
     }
 
     @javax.persistence.Converter(autoApply = true)
-    public class Converter implements AttributeConverter<DocumentType, String> {
+    public static class Converter implements AttributeConverter<DocumentType, String> {
 
         @Override
         public String convertToDatabaseColumn(DocumentType attribute) {

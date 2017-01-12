@@ -10,7 +10,7 @@ public enum PostingItemType {
     P; 
 
     @javax.persistence.Converter(autoApply = true)
-    public class Converter implements AttributeConverter<PostingItemType, String> {
+    public static class Converter implements AttributeConverter<PostingItemType, String> {
 
         @Override
         public String convertToDatabaseColumn(PostingItemType attribute) {

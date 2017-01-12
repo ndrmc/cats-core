@@ -1,6 +1,7 @@
 package org.cats.stock.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.cats.core.BaseModel;
 
 import javax.persistence.Entity;
@@ -34,6 +35,7 @@ public class Receipt extends BaseModel {
     private Long warehouseId;
 
     @OneToMany(mappedBy = "receipt")
+    @JsonManagedReference
     private List<ReceiptLine> receiptLines;
 
     public Receipt(){}
