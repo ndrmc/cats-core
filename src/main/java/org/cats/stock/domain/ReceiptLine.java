@@ -1,9 +1,11 @@
 package org.cats.stock.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.cats.core.BaseModel;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -15,7 +17,8 @@ public class ReceiptLine extends BaseModel {
     private Long batchId;
 
     @ManyToOne
-    @JsonIgnore
+    @JoinColumn(name="receipt_id")
+    @JsonBackReference
     private Receipt receipt;
 
     public Long getCommodityId() {

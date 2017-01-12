@@ -3,6 +3,7 @@ package org.cats.accounting.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.cats.core.BaseModel;
 import org.cats.stock.enums.PostingItemType;
+import org.springframework.web.servlet.tags.form.PasswordInputTag;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -40,7 +41,7 @@ public class PostingItem extends BaseModel {
     Long woredaId;
     Long fdpId;
 
-    @Enumerated(value = EnumType.STRING)
+    @Convert(converter = PostingItemType.Converter.class)
     PostingItemType postingItemType;
 
     @ManyToOne

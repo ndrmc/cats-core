@@ -15,10 +15,11 @@ public class Posting extends BaseModel {
 
     private UUID postingCode;
 
-    private Long documentId;
 
-    @Enumerated(value = EnumType.STRING)
+    @Convert(converter = DocumentType.Converter.class)
     private DocumentType documentType;
+
+    private Long documentId;
 
     private Boolean posted;
 
