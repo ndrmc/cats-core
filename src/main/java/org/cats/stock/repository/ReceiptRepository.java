@@ -10,6 +10,6 @@ public interface ReceiptRepository extends JpaRepository<Receipt, Long> {
 
     List<Receipt> findByHubId(Integer hubId );
 
-    List<Receipt> findByStoreLocationId(Integer storeLocationId );
+    List<Receipt> findByWarehouseId(Integer warehouseId );
 
 }

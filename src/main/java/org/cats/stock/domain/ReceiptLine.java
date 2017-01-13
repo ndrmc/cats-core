@@ -1,17 +1,20 @@
 package org.cats.stock.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.cats.core.BaseModel;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class ReceiptLine extends BaseModel {
 
+    @NotNull
+    private Long commodityCategoryId;
     private Long commodityId;
+    @NotNull
     private Float amount;
     private Long uomId;
     private Long projectId;
@@ -21,6 +24,14 @@ public class ReceiptLine extends BaseModel {
     @JoinColumn(name="receipt_id")
     @JsonBackReference
     private Receipt receipt;
+
+    public Long getCommodityCategoryId() {
+        return commodityCategoryId;
+    }
+
+    public void setCommodityCategoryId(Long commodityCategoryId) {
+        this.commodityCategoryId = commodityCategoryId;
+    }
 
     public Long getCommodityId() {
         return commodityId;

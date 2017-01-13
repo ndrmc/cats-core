@@ -1,7 +1,9 @@
 package org.cats.stock.service;
 
+import org.cats.accounting.service.PostingService;
 import org.cats.stock.domain.Receipt;
 import org.cats.stock.domain.ReceiptLine;
+import org.cats.stock.enums.DocumentType;
 import org.cats.stock.exception.ReceiptServiceException;
 import org.cats.stock.repository.ReceiptLineItemRepository;
 import org.cats.stock.repository.ReceiptRepository;
@@ -20,11 +22,16 @@ public class ReceiptServiceImpl  {
 
     private ReceiptRepository receiptRepository;
     private ReceiptLineItemRepository receiptLineItemRepository;
+    private PostingService postingService;
 
     @Autowired
-    public ReceiptServiceImpl(ReceiptRepository receiptRepository, ReceiptLineItemRepository receiptLineItemRepository ) {
+    public ReceiptServiceImpl(ReceiptRepository receiptRepository,
+                              ReceiptLineItemRepository receiptLineItemRepository,
+                              PostingService postingService
+                              ) {
         this.receiptRepository = receiptRepository;
         this.receiptLineItemRepository = receiptLineItemRepository;
+        this.postingService = postingService;
     }
 
     
@@ -43,8 +50,8 @@ public class ReceiptServiceImpl  {
     }
 
     
-    public List<Receipt> getReceiptsByStoreLocationId(Integer storeLocationId) {
-        return receiptRepository.findByStoreLocationId(storeLocationId);
+    public List<Receipt> getReceiptsByWarehouseId(Integer warehouseId) {
+        return receiptRepository.findByWarehouseId(warehouseId);
     }
 
     
@@ -54,7 +61,13 @@ public class ReceiptServiceImpl  {
 
     
     public Receipt saveReceipt(Receipt receipt) {
-        return receiptRepository.save(receipt);
+        receipt = receiptRepository.save(receipt);
+
+        if( receipt.getPost()) {
+            postingService.post(receipt);
+        }
+
+        return receipt;
     }
 
     
@@ -62,6 +75,10 @@ public class ReceiptServiceImpl  {
 
         if( !receiptRepository.exists(receipt.getId())) {
             throw new ReceiptServiceException("No receipt document exists for the id: " + receipt.getId().toString());
+        }
+
+        if( receipt.getPost() && !postingService.postingExistsForDocument(DocumentType.RECEIPT, receipt.getId())) {
+            postingService.post(receipt);
         }
 
         return receiptRepository.save(receipt);

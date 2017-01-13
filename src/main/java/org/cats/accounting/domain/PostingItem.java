@@ -2,10 +2,8 @@ package org.cats.accounting.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.cats.core.BaseModel;
-import org.cats.stock.domain.Receipt;
 import org.cats.stock.domain.ReceiptLine;
 import org.cats.stock.enums.PostingItemType;
-import org.springframework.web.servlet.tags.form.PasswordInputTag;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -29,7 +27,7 @@ public class PostingItem extends BaseModel {
     Integer storeNo;
     Integer stack;
 
-    Long projectCodeId;
+    Long projectId;
     Long batchId;
     Long programId;
     Long commodityId;
@@ -41,6 +39,7 @@ public class PostingItem extends BaseModel {
     Long regionId;
     Long zoneId;
     Long woredaId;
+
     Long fdpId;
 
     @Convert(converter = PostingItemType.Converter.class)
@@ -176,12 +175,12 @@ public class PostingItem extends BaseModel {
         this.stack = stack;
     }
 
-    public Long getProjectCodeId() {
-        return projectCodeId;
+    public Long getProjectId() {
+        return projectId;
     }
 
-    public void setProjectCodeId(Long projectCodeId) {
-        this.projectCodeId = projectCodeId;
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
     }
 
     public Long getBatchId() {

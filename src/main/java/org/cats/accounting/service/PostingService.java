@@ -8,9 +8,7 @@ import org.cats.accounting.domain.Posting;
 import org.cats.accounting.domain.PostingItem;
 import org.cats.accounting.repository.PostingRepository;
 import org.cats.stock.domain.Dispatch;
-import org.cats.stock.domain.DispatchItem;
 import org.cats.stock.domain.Receipt;
-import org.cats.stock.domain.ReceiptLine;
 import org.cats.stock.enums.DocumentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,13 +42,17 @@ public class PostingService {
         int x = 3;
     }
 
+    public boolean postingExistsForDocument( DocumentType documentType, Long id) {
+        return null != postingRepository.findByDocumentTypeAndDocumentId(documentType, id);
+    }
 
+    /**
+     * Constructs and returns posting entries from a Receipt docuement
+     *
+     * @param receipt
+     * @return
+     */
     public Posting post(Receipt receipt) {
-        /*
-           # Iterate on receipt lines and construct posting items
-           # Call internal 'post' method
-           # Return posting
-         */
 
         Account stockAccount = accountService.getAccount(AccountCode.STOCK);
         Account receivedAccount = accountService.getAccount(AccountCode.RECEIVED);
@@ -59,29 +61,51 @@ public class PostingService {
         List<PostingItem> postingItems = new ArrayList<>();
 
         receipt.getReceiptLines().forEach(rl -> {
-            PostingItem debit = PostingItem.newPostingItem();
-            PostingItem credit = PostingItem.newPostingItem();
 
-            debit.setJournalId(receiptJournal.getId());
+            /*
+                    DEBIT
+             */
+            PostingItem debit = PostingItem.newPostingItem();
+
             debit.setAccountId(receivedAccount.getId());
-            debit.setQuantity(rl.getAmount() * -1);
-            debit.setCommodityId(rl.getCommodityId());
+            debit.setJournalId(receiptJournal.getId());
             debit.setDonorId(receipt.getSupplierId());
+
             debit.setHubId(receipt.getHubId());
             debit.setWarehouseId(receipt.getWarehouseId());
-            //debit.setProgramId(receipt.getProgramId());
 
-            credit.setJournalId(receiptJournal.getId());
+
+            debit.setProgramId(receipt.getProgramId());
+
+            debit.setCommodityId(rl.getCommodityId());
+            debit.setCommodityCategoryId(rl.getCommodityCategoryId());
+
+            debit.setQuantity(rl.getAmount() * -1);
+
+            postingItems.add(debit);
+
+            /*
+                    CREDIT
+             */
+            PostingItem credit = PostingItem.newPostingItem();
+
             credit.setAccountId(stockAccount.getId());
-            credit.setQuantity(rl.getAmount());
-            credit.setCommodityId(rl.getCommodityId());
+            credit.setJournalId(receiptJournal.getId());
             credit.setDonorId(receipt.getSupplierId());
+
             credit.setHubId(receipt.getHubId());
             credit.setWarehouseId(receipt.getWarehouseId());
-            //credit.setProgramId(receipt.getProgramId());
+
+
+            credit.setProgramId(receipt.getProgramId());
+
+            credit.setCommodityId(rl.getCommodityId());
+            credit.setCommodityCategoryId(rl.getCommodityCategoryId());
+
+            credit.setQuantity(rl.getAmount());
+
 
             postingItems.add(credit);
-            postingItems.add(debit);
         });
 
 
@@ -94,19 +118,31 @@ public class PostingService {
     }
 
     private Posting post(DocumentType documentType, Long documentId, List<PostingItem> postingItems) {
+
+        if(!validatePost(postingItems)){
+            throw new IllegalArgumentException("Posting items did not pass validation.");
+        }
+
         Posting posting = new Posting();
         posting.setDocumentId(documentId);
         posting.setDocumentType(documentType);
         posting.getPostingItems().addAll(postingItems);
 
-        if(validate(posting)){
-            postingRepository.save(posting);
-        }
+        postingRepository.save(posting);
 
-        return new Posting();
+        return posting;
     }
 
-    private Boolean validate(Posting posting){
+    private Boolean validatePost(List<PostingItem> postingItems)
+    {
+        Float sumOfQuantities = 0f;
+
+        for (PostingItem postingItem : postingItems) {
+            sumOfQuantities += postingItem.getQuantity();
+        }
+
+        if( sumOfQuantities > 0f ) return false;
+
         return true;
     }
 }
