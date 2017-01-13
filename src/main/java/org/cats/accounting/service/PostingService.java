@@ -29,8 +29,8 @@ public class PostingService {
     }
 
 
-    public void deuggingHook() {
-        assert true;
+    public void debuggingHook() {
+        int x = 3;
     }
 
 

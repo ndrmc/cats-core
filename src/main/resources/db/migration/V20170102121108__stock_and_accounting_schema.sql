@@ -11,9 +11,9 @@
 /*==============================================================*/
 create table account (
   id                   serial not null,
+  code                 varchar(20)          null,
   name                 varchar(200)         null,
   description          varchar(200)         null,
-  account_type         varchar(10)          null,
 
   created_date         timestamp with time zone                 null,
   updated_date         timestamp with time zone                 null,
@@ -127,6 +127,7 @@ create table journal (
   id                   serial not null,
   name                 varchar(200)         null,
   description          varchar(200)         null,
+  code                 varchar(20)         null,
 
   created_date         timestamp with time zone                 null,
   updated_date         timestamp with time zone                 null,

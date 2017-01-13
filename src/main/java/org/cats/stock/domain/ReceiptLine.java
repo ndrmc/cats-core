@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class ReceiptLine extends BaseModel {
+
     private Long commodityId;
     private Float amount;
     private Long uomId;
