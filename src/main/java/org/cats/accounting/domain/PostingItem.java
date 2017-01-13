@@ -2,6 +2,8 @@ package org.cats.accounting.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.cats.core.BaseModel;
+import org.cats.stock.domain.Receipt;
+import org.cats.stock.domain.ReceiptLine;
 import org.cats.stock.enums.PostingItemType;
 import org.springframework.web.servlet.tags.form.PasswordInputTag;
 
@@ -54,6 +56,52 @@ public class PostingItem extends BaseModel {
         postingItemCode = UUID.randomUUID();
     }
 
+    public static PostingItem newPostingItem(){
+        return new PostingItem();
+    }
+
+    public static PostingItem newPostingFromReceipt(ReceiptLine receiptLine){
+        PostingItem postingItem = new PostingItem();
+
+
+        // get values for PI from incoming receipt object
+        return postingItem;
+    }
+
+    public PostingItem account(Long accountId){
+        this.setAccountId(accountId);
+        return this;
+    }
+
+    public PostingItem commodity(Long commodity){
+        this.setCommodityId(commodity);
+        return this;
+    }
+
+    public PostingItem quantity(Float quantity){
+        this.setQuantity(quantity);
+        return this;
+    }
+
+    public PostingItem donor(Long donor){
+        this.setDonorId(donor);
+        return this;
+    }
+
+    public PostingItem hub(Long hub){
+        this.setHubId(hub);
+        return this;
+    }
+
+    public PostingItem warehouse(Long warehouse){
+        this.setDonorId(warehouse);
+        return this;
+    }
+
+    public PostingItem operation(Long operation){
+        this.setOperationId(operation);
+        return this;
+    }
 
     public Posting getPosting() {
         return posting;

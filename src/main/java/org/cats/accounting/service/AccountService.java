@@ -23,4 +23,8 @@ public class AccountService {
 	public List<Account> getList() {
 		return accountRepository.findAll();
 	}
+
+	public Account getAccount(String accountCode){
+		return accountRepository.findByCode(accountCode);
+	}
 }

@@ -25,4 +25,8 @@ public class JournalService {
 	public List<Journal> getList() {
 		return journalRepository.findAll();
 	}
+
+	public Journal getJournalByCode(String code){
+		return journalRepository.findByCode(code);
+	}
 }
