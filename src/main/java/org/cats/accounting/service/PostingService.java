@@ -2,17 +2,18 @@ package org.cats.accounting.service;
 
 import org.cats.accounting.config.AccountCode;
 import org.cats.accounting.config.JournalCode;
-import org.cats.accounting.domain.Account;
-import org.cats.accounting.domain.Journal;
-import org.cats.accounting.domain.Posting;
-import org.cats.accounting.domain.PostingItem;
+import org.cats.accounting.domain.*;
+import org.cats.accounting.repository.PostingItemRepository;
 import org.cats.accounting.repository.PostingRepository;
 import org.cats.stock.domain.Dispatch;
 import org.cats.stock.domain.Receipt;
+import org.cats.stock.domain.ReceiptLine;
 import org.cats.stock.enums.DocumentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,8 @@ public class PostingService {
 
     private PostingRepository postingRepository;
 
+    private PostingItemRepository postingItemRepository;
+
     @Autowired
     AccountService accountService;
 
@@ -33,8 +36,9 @@ public class PostingService {
 
 
     @Autowired
-    public PostingService(PostingRepository postingRepository) {
+    public PostingService(PostingRepository postingRepository, PostingItemRepository postingItemRepository) {
         this.postingRepository = postingRepository;
+        this.postingItemRepository = postingItemRepository;
     }
 
 
@@ -56,23 +60,27 @@ public class PostingService {
 
         Account stockAccount = accountService.getAccount(AccountCode.STOCK);
         Account receivedAccount = accountService.getAccount(AccountCode.RECEIVED);
+
         Journal receiptJournal = journalService.getJournalByCode(JournalCode.GOODS_RECEIVED);
 
         List<PostingItem> postingItems = new ArrayList<>();
 
-        receipt.getReceiptLines().forEach(rl -> {
-
+        for (ReceiptLine rl : receipt.getReceiptLines()) {
             /*
                     DEBIT
-             */
+            */
             PostingItem debit = PostingItem.newPostingItem();
 
             debit.setAccountId(receivedAccount.getId());
             debit.setJournalId(receiptJournal.getId());
+
             debit.setDonorId(receipt.getSupplierId());
 
             debit.setHubId(receipt.getHubId());
             debit.setWarehouseId(receipt.getWarehouseId());
+
+            debit.setProjectId(rl.getProjectId());
+            debit.setBatchId(rl.getBatchId());
 
 
             debit.setProgramId(receipt.getProgramId());
@@ -80,7 +88,7 @@ public class PostingService {
             debit.setCommodityId(rl.getCommodityId());
             debit.setCommodityCategoryId(rl.getCommodityCategoryId());
 
-            debit.setQuantity(rl.getAmount() * -1);
+            debit.setQuantity(rl.getAmount().multiply(new BigDecimal(-1)));
 
             postingItems.add(debit);
 
@@ -96,6 +104,8 @@ public class PostingService {
             credit.setHubId(receipt.getHubId());
             credit.setWarehouseId(receipt.getWarehouseId());
 
+            credit.setProjectId(rl.getProjectId());
+            credit.setBatchId(rl.getBatchId());
 
             credit.setProgramId(receipt.getProgramId());
 
@@ -106,18 +116,20 @@ public class PostingService {
 
 
             postingItems.add(credit);
-        });
+        }
 
 
-        return post( DocumentType.RECEIPT, receipt.getId(), postingItems);
+
+        return post( DocumentType.RECEIPT, receipt.getId(), PostingType.NORMAL, postingItems);
     }
 
     public Posting post(Dispatch dispatch) {
 
-        return post( DocumentType.DISPATCH, dispatch.getId(), new ArrayList<>());
+        return post( DocumentType.DISPATCH, dispatch.getId(), PostingType.NORMAL, new ArrayList<>());
     }
 
-    private Posting post(DocumentType documentType, Long documentId, List<PostingItem> postingItems) {
+    @Transactional
+    private Posting post(DocumentType documentType, Long documentId, PostingType postingType,  List<PostingItem> postingItems) {
 
         if(!validatePost(postingItems)){
             throw new IllegalArgumentException("Posting items did not pass validation.");
@@ -126,23 +138,27 @@ public class PostingService {
         Posting posting = new Posting();
         posting.setDocumentId(documentId);
         posting.setDocumentType(documentType);
-        posting.getPostingItems().addAll(postingItems);
+        posting.setPostingType(postingType);
+        posting.setPostingItems(postingItems);
 
         postingRepository.save(posting);
+
+        for (PostingItem postingItem : postingItems) {
+            postingItem.setPosting(posting);
+            postingItemRepository.save(postingItem);
+        }
 
         return posting;
     }
 
     private Boolean validatePost(List<PostingItem> postingItems)
     {
-        Float sumOfQuantities = 0f;
+        BigDecimal sumOfQuantities = new BigDecimal(0);
 
         for (PostingItem postingItem : postingItems) {
-            sumOfQuantities += postingItem.getQuantity();
+            sumOfQuantities = sumOfQuantities.add(postingItem.getQuantity()) ;
         }
 
-        if( sumOfQuantities > 0f ) return false;
-
-        return true;
+        return sumOfQuantities.equals(new BigDecimal(0));
     }
 }

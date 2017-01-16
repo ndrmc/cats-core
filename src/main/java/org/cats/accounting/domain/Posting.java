@@ -4,6 +4,7 @@ import org.cats.core.BaseModel;
 import org.cats.stock.enums.DocumentType;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,13 +20,46 @@ public class Posting extends BaseModel {
     @Convert(converter = DocumentType.Converter.class)
     private DocumentType documentType;
 
+    @Convert(converter = PostingType.Converter.class)
+    private PostingType postingType;
+
     private Long documentId;
 
-    private Boolean posted;
+    @OneToOne(optional = true)
+    @JoinColumn(name = "reversed_posting_id")
+    Posting reversedPosting;
+
+    Date postingDate;
 
 
     @OneToMany(mappedBy = "posting")
     List<PostingItem> postingItems;
+
+
+    @PrePersist
+    protected void populateFieldsBeforeSave() {
+        postingCode = UUID.randomUUID();
+
+        if ( null != postingDate) {
+            postingDate = new Date();
+        }
+    }
+
+    public Date getPostingDate() {
+        return postingDate;
+    }
+
+    public void setPostingDate(Date postingDate) {
+        this.postingDate = postingDate;
+    }
+
+    public Posting getReversedPosting() {
+        return reversedPosting;
+    }
+
+    public void setReversedPosting(Posting reversedPosting) {
+        this.reversedPosting = reversedPosting;
+    }
 
     public List<PostingItem> getPostingItems() {
         return postingItems;
@@ -35,12 +69,14 @@ public class Posting extends BaseModel {
         this.postingItems = postingItems;
     }
 
-    @PrePersist
-    protected void onCreate() {
 
-        postingCode = UUID.randomUUID();
+    public PostingType getPostingType() {
+        return postingType;
     }
 
+    public void setPostingType(PostingType postingType) {
+        this.postingType = postingType;
+    }
 
     public UUID getPostingCode() {
         return postingCode;
@@ -66,11 +102,4 @@ public class Posting extends BaseModel {
         this.documentType = documentType;
     }
 
-    public Boolean getPosted() {
-        return posted;
-    }
-
-    public void setPosted(Boolean posted) {
-        this.posted = posted;
-    }
 }

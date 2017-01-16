@@ -63,7 +63,12 @@ public class ReceiptServiceImpl  {
     public Receipt saveReceipt(Receipt receipt) {
         receipt = receiptRepository.save(receipt);
 
-        if( receipt.getPost()) {
+        for (ReceiptLine receiptLine : receipt.getReceiptLines()) {
+            receiptLineItemRepository.save(receiptLine);
+        }
+
+
+        if( !receipt.isDraft()) {
             postingService.post(receipt);
         }
 
@@ -77,9 +82,16 @@ public class ReceiptServiceImpl  {
             throw new ReceiptServiceException("No receipt document exists for the id: " + receipt.getId().toString());
         }
 
-        if( receipt.getPost() && !postingService.postingExistsForDocument(DocumentType.RECEIPT, receipt.getId())) {
-            postingService.post(receipt);
+
+        if(!receipt.isDraft()) {
+            if( !postingService.postingExistsForDocument(DocumentType.RECEIPT, receipt.getId())) {
+                postingService.post(receipt);
+            }
+            else {
+                //Reverse and register a new transaction
+            }
         }
+
 
         return receiptRepository.save(receipt);
     }

@@ -3,9 +3,10 @@ package org.cats.accounting.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.cats.core.BaseModel;
 import org.cats.stock.domain.ReceiptLine;
-import org.cats.stock.enums.PostingItemType;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -14,27 +15,26 @@ import java.util.UUID;
 
 @Entity
 public class PostingItem extends BaseModel {
-
-
     UUID postingItemCode;
+
     Long accountId;
     Long journalId;
     Long donorId;
 
     Long hubId;
     Long warehouseId;
-
-    Integer storeNo;
-    Integer stack;
+    Long storeId;
+    Long stackId;
 
     Long projectId;
     Long batchId;
     Long programId;
+    Long operationId;
+
     Long commodityId;
     Long commodityCategoryId;
-    Float quantity;
 
-    Long operationId;
+    BigDecimal quantity;
 
     Long regionId;
     Long zoneId;
@@ -42,64 +42,38 @@ public class PostingItem extends BaseModel {
 
     Long fdpId;
 
-    @Convert(converter = PostingItemType.Converter.class)
-    PostingItemType postingItemType;
 
     @ManyToOne
     @JsonIgnore
     Posting posting;
 
     @PrePersist
-    protected void onCreate() {
+    protected void populateFieldsPrePersist() {
 
         postingItemCode = UUID.randomUUID();
     }
 
+
+    public Long getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Long storeId) {
+        this.storeId = storeId;
+    }
+
+    public Long getStackId() {
+        return stackId;
+    }
+
+    public void setStackId(Long stackId) {
+        this.stackId = stackId;
+    }
+
+
+
     public static PostingItem newPostingItem(){
         return new PostingItem();
-    }
-
-    public static PostingItem newPostingFromReceipt(ReceiptLine receiptLine){
-        PostingItem postingItem = new PostingItem();
-
-
-        // get values for PI from incoming receipt object
-        return postingItem;
-    }
-
-    public PostingItem account(Long accountId){
-        this.setAccountId(accountId);
-        return this;
-    }
-
-    public PostingItem commodity(Long commodity){
-        this.setCommodityId(commodity);
-        return this;
-    }
-
-    public PostingItem quantity(Float quantity){
-        this.setQuantity(quantity);
-        return this;
-    }
-
-    public PostingItem donor(Long donor){
-        this.setDonorId(donor);
-        return this;
-    }
-
-    public PostingItem hub(Long hub){
-        this.setHubId(hub);
-        return this;
-    }
-
-    public PostingItem warehouse(Long warehouse){
-        this.setDonorId(warehouse);
-        return this;
-    }
-
-    public PostingItem operation(Long operation){
-        this.setOperationId(operation);
-        return this;
     }
 
     public Posting getPosting() {
@@ -159,21 +133,6 @@ public class PostingItem extends BaseModel {
         this.warehouseId = warehouseId;
     }
 
-    public Integer getStoreNo() {
-        return storeNo;
-    }
-
-    public void setStoreNo(Integer storeNo) {
-        this.storeNo = storeNo;
-    }
-
-    public Integer getStack() {
-        return stack;
-    }
-
-    public void setStack(Integer stack) {
-        this.stack = stack;
-    }
 
     public Long getProjectId() {
         return projectId;
@@ -215,11 +174,11 @@ public class PostingItem extends BaseModel {
         this.commodityCategoryId = commodityCategoryId;
     }
 
-    public Float getQuantity() {
+    public BigDecimal getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Float quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
 
@@ -263,11 +222,4 @@ public class PostingItem extends BaseModel {
         this.fdpId = fdpId;
     }
 
-    public PostingItemType getPostingItemType() {
-        return postingItemType;
-    }
-
-    public void setPostingItemType(PostingItemType postingItemType) {
-        this.postingItemType = postingItemType;
-    }
 }

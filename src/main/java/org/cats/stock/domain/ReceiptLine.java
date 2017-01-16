@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @Entity
 public class ReceiptLine extends BaseModel {
@@ -15,8 +16,7 @@ public class ReceiptLine extends BaseModel {
     private Long commodityCategoryId;
     private Long commodityId;
     @NotNull
-    private Float amount;
-    private Long uomId;
+    private BigDecimal amount;
     private Long projectId;
     private Long batchId;
 
@@ -41,20 +41,12 @@ public class ReceiptLine extends BaseModel {
         this.commodityId = commodityId;
     }
 
-    public Float getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Float amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
-    }
-
-    public Long getUomId() {
-        return uomId;
-    }
-
-    public void setUomId(Long uomId) {
-        this.uomId = uomId;
     }
 
     public Long getProjectId() {

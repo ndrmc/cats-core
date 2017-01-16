@@ -36,7 +36,7 @@ public class Receipt extends BaseModel {
      * Determines whether posting entry should be created for the receipt || not
      * if true PostingService will try to create a corresponding entry
      */
-    private Boolean post = true;
+    private Boolean draft = false;
 
     @OneToMany(mappedBy = "receipt")
     @JsonManagedReference
@@ -190,12 +190,12 @@ public class Receipt extends BaseModel {
         this.commoditySourceId = commoditySourceId;
     }
 
-    public Boolean getPost() {
-        return post;
+    public Boolean isDraft() {
+        return draft;
     }
 
-    public void setPost(Boolean post) {
-        this.post = post;
+    public void setDraft(Boolean draft) {
+        this.draft = draft;
     }
 
     public List<ReceiptLine> getReceiptLines() {

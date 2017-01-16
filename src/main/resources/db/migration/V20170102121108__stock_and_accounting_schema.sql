@@ -30,9 +30,12 @@ create table account (
 create table posting (
   id                   serial               not null,
   posting_code         UUID                 not null,
-  document_type        varchar(100)         null,
+  document_type        varchar(30)          null,
+  posting_type         varchar(30)          null,
   document_id          int4                 null,
-  posted               bool                 null,
+  reversed_posting_id  int4                 null,
+  posting_date         timestamp with time zone                 null,
+
 
   created_date         timestamp with time zone                 null,
   updated_date         timestamp with time zone                 null,
@@ -44,17 +47,16 @@ create table posting (
 /* Table: posting_item                                   */
 /*==============================================================*/
 create table posting_item (
-  id                   int4                 not null,
-  posting_item_code     uuid                 not null,
+  id                   SERIAL                 not null,
+  posting_item_code    uuid                 not null,
   posting_id           int4                 null,
   account_id           int4                 null,
   journal_id           int4                 null,
   donor_id             int4                 null,
-  posting_item_type    VARCHAR(20)              null,
   hub_id               int4                 null,
   warehouse_id         int4                 null,
-  store_no             int4                 null,
-  stack                int4                 null,
+  store_id             int4                 null,
+  stack_id                int4                 null,
   project_id      int4                 null,
   batch_id             int4                 null,
   program_id           int4                 null,
@@ -82,16 +84,22 @@ create table dispatch (
   gin                  varchar(100)         not null,
   requisition_no       varchar(100)         not null,
   operation_id         int4                 null,
-  period_month         int4                 null,
-  period_round         int4                 null,
   fdp_id               int4                 null,
-  transport_order_id   int4                 null,
   driver               varchar(100)         null,
-  plate_no             varchar(100)         null,
   dispatched_date      timestamp with time zone                 null,
   created_by           int4                 null,
   dispatched_by        int4                 null,
-  remark               text                 null,
+  hub_id               int4                 null,
+  warehouse_id         int4                 null,
+  trasporter_id        int4                 null,
+  remark               varchar(1000)                 null,
+
+  weight_bridge_ticket_number       varchar(100)         not null,
+  trailer_plate_number       varchar(100)         not null,
+  truck_plate_number       varchar(100)         not null,
+
+
+  draft               BOOL                 null,
 
   created_date         timestamp with time zone                 null,
   updated_date         timestamp with time zone                 null,
@@ -199,7 +207,7 @@ create table receipt (
   invoice_no           varchar(200)         null,
   commodity_source_id  int4                 null,
   program_id          int4                   null,
-  post               BOOL                 null,
+  draft               BOOL                 null,
 
   created_date         timestamp with time zone                 null,
   updated_date         timestamp with time zone                 null,
@@ -217,7 +225,6 @@ create table receipt_line (
   commodity_category_id         int4                 null,
   project_id           int4                 not null,
   batch_id             int4                 null,
-  uom_id               int4                 null,
   amount               decimal              null,
 
   created_date         timestamp with time zone                 null,
