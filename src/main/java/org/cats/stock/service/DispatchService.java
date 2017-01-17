@@ -6,6 +6,8 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.cats.accounting.domain.Posting;
+import org.cats.accounting.domain.PostingType;
 import org.cats.accounting.service.PostingService;
 import org.cats.stock.domain.Dispatch;
 import org.cats.stock.domain.DispatchItem;
@@ -86,9 +88,9 @@ public class DispatchService {
 			dispatchItem.setDispatchId(savedDispatch.getId());
 			dispatchItemRepository.save(dispatchItem);
 		}
-
-		if( !dispatch.isDraft()) {
-			postingService.post(dispatch);
+		savedDispatch.setDispatchItems(dispatch.getDispatchItems()); //workaround: dispatch should have been saved with the items
+		if( !savedDispatch.isDraft()) {
+			postingService.post(savedDispatch);
 		}
 
 		return savedDispatch;
@@ -103,17 +105,24 @@ public class DispatchService {
 			throw new NotFoundException("Dispatch with id "+dispatch.getId()+"not found");
 		}
 
+		Dispatch updatedDispatch = dispatchRepository.save(dispatch);
+
+		updatedDispatch.setDispatchItems(dispatch.getDispatchItems());
 
 		if( !dispatch.isDraft()) {
-			if( !postingService.postingExistsForDocument(DocumentType.RECEIPT, dispatch.getId())) {
-				postingService.post(dispatch);
+			if( !postingService.postingExistsForDocument(DocumentType.DISPATCH, dispatch.getId(), PostingType.NORMAL)) {
+				postingService.post(updatedDispatch);
 			}
 			else {
-				//Reverse and register a new transaction
+				Posting posting = postingService.getPostingForDocument(DocumentType.DISPATCH, dispatch.getId(), PostingType.NORMAL);
+
+				postingService.reversePosting(posting);
+
+				postingService.post(updatedDispatch);
 			}
 		}
 
-		return dispatchRepository.save(dispatch);
+		return updatedDispatch;
 	}
 
 	@Transactional

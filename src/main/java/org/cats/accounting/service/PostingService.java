@@ -1,5 +1,6 @@
 package org.cats.accounting.service;
 
+import org.apache.poi.hssf.util.HSSFColor;
 import org.cats.accounting.config.AccountCode;
 import org.cats.accounting.config.JournalCode;
 import org.cats.accounting.domain.*;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,8 +49,12 @@ public class PostingService {
         int x = 3;
     }
 
-    public boolean postingExistsForDocument( DocumentType documentType, Long id) {
-        return null != postingRepository.findByDocumentTypeAndDocumentId(documentType, id);
+    public boolean postingExistsForDocument( DocumentType documentType, Long id, PostingType postingType) {
+        return null != postingRepository.findByDocumentTypeAndDocumentIdAndPostingType(documentType, id, postingType);
+    }
+
+    public Posting getPostingForDocument( DocumentType documentType, Long id, PostingType postingType) {
+        return postingRepository.findByDocumentTypeAndDocumentIdAndPostingType(documentType, id, postingType);
     }
 
     /**
@@ -201,9 +207,39 @@ public class PostingService {
         return post( DocumentType.DISPATCH, dispatch.getId(), PostingType.NORMAL, postingItems);
     }
 
-    /*private Posting reversePosting( Posting posting) {
+    @Transactional
+    public Posting reversePosting( @NotNull  Posting originalPosting) {
 
-    }*/
+        originalPosting.setPostingType(PostingType.REVERSED);
+        postingRepository.save(originalPosting);
+
+
+        Posting reversalPosting = new Posting();
+
+        reversalPosting.setPostingType(PostingType.REVERSAL);
+        reversalPosting.setReversedPosting(originalPosting);
+        reversalPosting.setDocumentType(originalPosting.getDocumentType());
+        reversalPosting.setDocumentId(originalPosting.getDocumentId());
+
+        postingRepository.save(reversalPosting);
+
+        for (PostingItem postingItem : originalPosting.getPostingItems()) {
+
+            PostingItem reversalPI = postingItem.clone();
+
+
+            reversalPI.setId(null);
+            reversalPI.setPosting(reversalPosting);
+            reversalPI.setQuantity(reversalPI.getQuantity().multiply(new BigDecimal(-1)));
+
+            postingItemRepository.save(reversalPI);
+        }
+
+        postingRepository.save(reversalPosting);
+
+
+        return reversalPosting;
+    }
 
     @Transactional
     private Posting post(DocumentType documentType, Long documentId, PostingType postingType,  List<PostingItem> postingItems) {
