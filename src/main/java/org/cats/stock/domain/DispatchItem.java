@@ -1,38 +1,36 @@
 package org.cats.stock.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.cats.core.BaseModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.math.BigDecimal;
 
 @Entity
 public class DispatchItem extends BaseModel {
 
 	private Long commodityId;
-	private Long dispatchId;
-	private Float quantity; 
-	private Long uomId;
+	private Long commodityCategoryId;
+
+	private BigDecimal quantity;
+
 	private Long projectId;
 	private Long batchId;
-	private Long stockMoveId;
-	private String description; 
+	private Long dispatchId;
+
+	private String description;
 
 	@ManyToOne
-	@JoinColumn(name = "dispatchId", referencedColumnName = "id", insertable = false, updatable = false)
 	@JsonIgnore
+	@JoinColumn(name="dispatchId", referencedColumnName = "id", insertable = false, updatable = false)
 	private Dispatch dispatch;
 
-	public Long getCommodityId() {
-		return commodityId;
-	}
-
-	public void setCommodityId(Long commodityId) {
-		this.commodityId = commodityId;
-	}
-	
 	public Long getDispatchId() {
 		return dispatchId;
 	}
@@ -41,20 +39,28 @@ public class DispatchItem extends BaseModel {
 		this.dispatchId = dispatchId;
 	}
 
-	public Float getQuantity() {
+	public Long getCommodityCategoryId() {
+		return commodityCategoryId;
+	}
+
+	public void setCommodityCategoryId(Long commodityCategoryId) {
+		this.commodityCategoryId = commodityCategoryId;
+	}
+
+	public Long getCommodityId() {
+		return commodityId;
+	}
+
+	public void setCommodityId(Long commodityId) {
+		this.commodityId = commodityId;
+	}
+
+	public BigDecimal getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(Float quantity) {
+	public void setQuantity(BigDecimal quantity) {
 		this.quantity = quantity;
-	}
-
-	public Long getUomId() {
-		return uomId;
-	}
-
-	public void setUomId(Long uomId) {
-		this.uomId = uomId;
 	}
 
 	public Long getProjectId() {
@@ -71,14 +77,6 @@ public class DispatchItem extends BaseModel {
 
 	public void setBatchId(Long batchId) {
 		this.batchId = batchId;
-	}
-
-	public Long getStockMoveId() {
-		return stockMoveId;
-	}
-
-	public void setStockMoveId(Long stockMoveId) {
-		this.stockMoveId = stockMoveId;
 	}
 
 	public String getDescription() {

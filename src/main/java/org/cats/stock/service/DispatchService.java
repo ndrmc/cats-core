@@ -6,7 +6,11 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.cats.accounting.service.PostingService;
 import org.cats.stock.domain.Dispatch;
+import org.cats.stock.domain.DispatchItem;
+import org.cats.stock.enums.DocumentType;
+import org.cats.stock.repository.DispatchItemRepository;
 import org.cats.stock.repository.DispatchRepository;
 import org.cats.util.URLBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,8 @@ public class DispatchService {
 
 
 	private DispatchRepository dispatchRepository; 
+	private DispatchItemRepository dispatchItemRepository;
+	private PostingService postingService;
 
 	@Autowired
 	private URLBuilder urlBuilder;
@@ -30,8 +36,10 @@ public class DispatchService {
 
 
 	@Autowired
-	public DispatchService(DispatchRepository dispatchRepository) {
+	public DispatchService(DispatchRepository dispatchRepository, DispatchItemRepository dispatchItemRepository, PostingService postingService) {
 		this.dispatchRepository = dispatchRepository;
+		this.dispatchItemRepository = dispatchItemRepository;
+		this.postingService = postingService;
 	}
 
 	public URLBuilder getUrlBuilder() {
@@ -70,15 +78,41 @@ public class DispatchService {
 
 
 	@Transactional
-	public Dispatch save(@NotNull @Valid final Dispatch dispatch) {
-		return dispatchRepository.save(dispatch);
+	public Dispatch save(@NotNull @Valid  Dispatch dispatch) {
+
+		Dispatch savedDispatch = dispatchRepository.save(dispatch);
+
+		for (DispatchItem dispatchItem : dispatch.getDispatchItems()) {
+			dispatchItem.setDispatchId(savedDispatch.getId());
+			dispatchItemRepository.save(dispatchItem);
+		}
+
+		if( !dispatch.isDraft()) {
+			postingService.post(dispatch);
+		}
+
+		return savedDispatch;
 	}
 
 	@Transactional
 	public Dispatch update(@NotNull @Valid final Dispatch dispatch) throws NotFoundException {
-		Dispatch dispatched=dispatchRepository.findOne(dispatch.getId());
-		if(dispatched==null)
+
+		Dispatch dispatched = dispatchRepository.findOne(dispatch.getId());
+
+		if( dispatched == null ) {
 			throw new NotFoundException("Dispatch with id "+dispatch.getId()+"not found");
+		}
+
+
+		if( !dispatch.isDraft()) {
+			if( !postingService.postingExistsForDocument(DocumentType.RECEIPT, dispatch.getId())) {
+				postingService.post(dispatch);
+			}
+			else {
+				//Reverse and register a new transaction
+			}
+		}
+
 		return dispatchRepository.save(dispatch);
 	}
 

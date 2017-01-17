@@ -6,6 +6,7 @@ import org.cats.accounting.domain.*;
 import org.cats.accounting.repository.PostingItemRepository;
 import org.cats.accounting.repository.PostingRepository;
 import org.cats.stock.domain.Dispatch;
+import org.cats.stock.domain.DispatchItem;
 import org.cats.stock.domain.Receipt;
 import org.cats.stock.domain.ReceiptLine;
 import org.cats.stock.enums.DocumentType;
@@ -125,8 +126,84 @@ public class PostingService {
 
     public Posting post(Dispatch dispatch) {
 
-        return post( DocumentType.DISPATCH, dispatch.getId(), PostingType.NORMAL, new ArrayList<>());
+
+        Account stockAccount = accountService.getAccount(AccountCode.STOCK);
+        Account dispatchedAccount = accountService.getAccount(AccountCode.DISPATCHED);
+
+        Journal goodsIssueJournal = journalService.getJournalByCode(JournalCode.GOODS_ISSUE);
+
+
+        List<PostingItem> postingItems = new ArrayList<>();
+
+        for (DispatchItem dispatchItem : dispatch.getDispatchItems()) {
+            /*
+                    DEBIT
+            */
+            PostingItem debit = PostingItem.newPostingItem();
+
+            debit.setAccountId(stockAccount.getId());
+            debit.setJournalId(goodsIssueJournal.getId());
+
+            debit.setHubId(dispatch.getHubId());
+            debit.setFdpId(dispatch.getFdpId());
+
+            debit.setWarehouseId(dispatch.getWarehouseId());
+
+            debit.setProjectId(dispatchItem.getProjectId());
+            debit.setBatchId(dispatchItem.getBatchId());
+
+            if(null != dispatch.getOperation()) {
+                debit.setProgramId(dispatch.getOperation().getProgramId());
+            }
+
+            debit.setCommodityId(dispatchItem.getCommodityId());
+            debit.setCommodityCategoryId(dispatchItem.getCommodityCategoryId());
+
+            debit.setOperationId(dispatch.getOperationId());
+
+            debit.setQuantity(dispatchItem.getQuantity().multiply(new BigDecimal(-1)));
+
+            postingItems.add(debit);
+
+            /*
+                    CREDIT
+            */
+            PostingItem credit = PostingItem.newPostingItem();
+
+
+            credit.setAccountId(dispatchedAccount.getId());
+            credit.setJournalId(goodsIssueJournal.getId());
+
+
+            credit.setHubId(dispatch.getHubId());
+            credit.setFdpId(dispatch.getFdpId());
+
+            credit.setWarehouseId(dispatch.getWarehouseId());
+
+            credit.setProjectId(dispatchItem.getProjectId());
+            credit.setBatchId(dispatchItem.getBatchId());
+
+            if(null != dispatch.getOperation()) {
+                credit.setProgramId(dispatch.getOperation().getProgramId());
+            }
+
+            credit.setCommodityId(dispatchItem.getCommodityId());
+            credit.setCommodityCategoryId(dispatchItem.getCommodityCategoryId());
+
+            credit.setOperationId(dispatch.getOperationId());
+
+            credit.setQuantity(dispatchItem.getQuantity());
+
+            postingItems.add(credit);
+        }
+
+
+        return post( DocumentType.DISPATCH, dispatch.getId(), PostingType.NORMAL, postingItems);
     }
+
+    /*private Posting reversePosting( Posting posting) {
+
+    }*/
 
     @Transactional
     private Posting post(DocumentType documentType, Long documentId, PostingType postingType,  List<PostingItem> postingItems) {

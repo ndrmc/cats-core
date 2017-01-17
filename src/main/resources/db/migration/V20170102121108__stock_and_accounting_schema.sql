@@ -89,10 +89,10 @@ create table dispatch (
   dispatched_date      timestamp with time zone                 null,
   created_by           int4                 null,
   dispatched_by        int4                 null,
+  remark               TEXT                 null,
   hub_id               int4                 null,
   warehouse_id         int4                 null,
-  trasporter_id        int4                 null,
-  remark               varchar(1000)                 null,
+  transporter_id        int4                 null,
 
   weight_bridge_ticket_number       varchar(100)         not null,
   trailer_plate_number       varchar(100)         not null,
@@ -113,12 +113,11 @@ create table dispatch (
 create table dispatch_item (
   id                   serial not null,
   commodity_id         int4                 null,
+  commodity_category_id int4                 null,
   dispatch_id          int4                 null,
-  quantity             float8               not null,
-  uom_id               int4                 null,
+  quantity             decimal               not null,
   project_id           int4                 not null,
   batch_id             int4                 null,
-  stock_move_id        int4                 null,
   description          text                 null,
 
 

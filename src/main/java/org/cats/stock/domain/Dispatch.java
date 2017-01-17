@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.cats.core.BaseModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -98,10 +99,6 @@ public class Dispatch extends BaseModel {
 
 	public void setTruckPlateNumber(String truckPlateNumber) {
 		this.truckPlateNumber = truckPlateNumber;
-	}
-
-	public Boolean getDraft() {
-		return draft;
 	}
 
 	public String getGin() {
