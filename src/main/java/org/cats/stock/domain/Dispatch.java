@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.cats.core.BaseModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,16 +21,21 @@ public class Dispatch extends BaseModel {
 	private String gin;
 	private String requisitionNo;
 	private Long operationId;
-	private Long periodMonth;
-	private Long periodRound;
 	private Long fdpId;
-	private Long transportOrderId;
 	private String driver;
-	private String plateNo;
 	private Date  dispatchedDate;
 	private Long createdBy  ;
 	private Long dispatchedBy;
 	private String  remark;
+	private Long hubId;
+	private Long warehouseId;
+	private Long transporterId;
+	private String weightBridgeTicketNumber;
+	private String trailerPlateNumber;
+	private String truckPlateNumber;
+
+	private Boolean draft = false;
+
 
 	@OneToMany(mappedBy = "dispatch")
 	private List<DispatchItem> dispatchItems;
@@ -38,6 +44,62 @@ public class Dispatch extends BaseModel {
 	@JoinColumn(name = "operationId", referencedColumnName = "id", insertable = false, updatable = false)
 	@JsonIgnore
 	private Operation operation;
+
+	public Boolean isDraft() {
+		return draft;
+	}
+
+	public void setDraft(Boolean draft) {
+		this.draft = draft;
+	}
+
+	public Long getHubId() {
+		return hubId;
+	}
+
+	public void setHubId(Long hubId) {
+		this.hubId = hubId;
+	}
+
+	public Long getWarehouseId() {
+		return warehouseId;
+	}
+
+	public void setWarehouseId(Long warehouseId) {
+		this.warehouseId = warehouseId;
+	}
+
+	public Long getTransporterId() {
+		return transporterId;
+	}
+
+	public void setTransporterId(Long transporterId) {
+		this.transporterId = transporterId;
+	}
+
+	public String getWeightBridgeTicketNumber() {
+		return weightBridgeTicketNumber;
+	}
+
+	public void setWeightBridgeTicketNumber(String weightBridgeTicketNumber) {
+		this.weightBridgeTicketNumber = weightBridgeTicketNumber;
+	}
+
+	public String getTrailerPlateNumber() {
+		return trailerPlateNumber;
+	}
+
+	public void setTrailerPlateNumber(String trailerPlateNumber) {
+		this.trailerPlateNumber = trailerPlateNumber;
+	}
+
+	public String getTruckPlateNumber() {
+		return truckPlateNumber;
+	}
+
+	public void setTruckPlateNumber(String truckPlateNumber) {
+		this.truckPlateNumber = truckPlateNumber;
+	}
 
 	public String getGin() {
 		return gin;
@@ -63,22 +125,6 @@ public class Dispatch extends BaseModel {
 		this.operationId = operationId;
 	}
 
-	public Long getPeriodMonth() {
-		return periodMonth;
-	}
-
-	public void setPeriodMonth(Long periodMonth) {
-		this.periodMonth = periodMonth;
-	}
-
-	public Long getPeriodRound() {
-		return periodRound;
-	}
-
-	public void setPeriodRound(Long periodRound) {
-		this.periodRound = periodRound;
-	}	
-
 	public Long getFdpId() {
 		return fdpId;
 	}
@@ -87,13 +133,6 @@ public class Dispatch extends BaseModel {
 		this.fdpId = fdpId;
 	}
 
-	public Long getTransportOrderId() {
-		return transportOrderId;
-	}
-
-	public void setTransportOrderId(Long transportOrderId) {
-		this.transportOrderId = transportOrderId;
-	}
 
 	public String getDriver() {
 		return driver;
@@ -101,14 +140,6 @@ public class Dispatch extends BaseModel {
 
 	public void setDriver(String driver) {
 		this.driver = driver;
-	}
-
-	public String getPlateNo() {
-		return plateNo;
-	}
-
-	public void setPlateNo(String plateNo) {
-		this.plateNo = plateNo;
 	}
 
 	public Date getDispatchedDate() {

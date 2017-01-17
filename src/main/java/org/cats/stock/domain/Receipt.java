@@ -1,6 +1,5 @@
 package org.cats.stock.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.cats.core.BaseModel;
 
@@ -17,7 +16,6 @@ public class Receipt extends BaseModel {
     private String grnNo;
     private Date receivedDate;
     private Long hubId;
-    private Long storeLocationId;
     private Long supplierId;
     private Long transporterId;
     private String plateNo;
@@ -31,14 +29,29 @@ public class Receipt extends BaseModel {
     private String purchaseOrderNo;
     private String invoiceNo;
     private Long commoditySourceId;
-    private Long status;
     private Long warehouseId;
+    private Long programId;
+
+    /**
+     * Determines whether posting entry should be created for the receipt || not
+     * if true PostingService will try to create a corresponding entry
+     */
+    private Boolean draft = false;
 
     @OneToMany(mappedBy = "receipt")
     @JsonManagedReference
     private List<ReceiptLine> receiptLines;
 
     public Receipt(){}
+
+    public Long getProgramId() {
+        return programId;
+    }
+
+    public void setProgramId(Long programId) {
+        this.programId = programId;
+    }
+
 
     public Long getWarehouseId() {
         return warehouseId;
@@ -71,14 +84,6 @@ public class Receipt extends BaseModel {
 
     public void setHubId(Long hubId) {
         this.hubId = hubId;
-    }
-
-    public Long getStoreLocationId() {
-        return storeLocationId;
-    }
-
-    public void setStoreLocationId(Long storeLocationId) {
-        this.storeLocationId = storeLocationId;
     }
 
     public Long getSupplierId() {
@@ -185,12 +190,12 @@ public class Receipt extends BaseModel {
         this.commoditySourceId = commoditySourceId;
     }
 
-    public Long getStatus() {
-        return status;
+    public Boolean isDraft() {
+        return draft;
     }
 
-    public void setStatus(Long status) {
-        this.status = status;
+    public void setDraft(Boolean draft) {
+        this.draft = draft;
     }
 
     public List<ReceiptLine> getReceiptLines() {

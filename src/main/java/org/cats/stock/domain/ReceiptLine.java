@@ -1,19 +1,22 @@
 package org.cats.stock.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.cats.core.BaseModel;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @Entity
 public class ReceiptLine extends BaseModel {
 
+    @NotNull
+    private Long commodityCategoryId;
     private Long commodityId;
-    private Float amount;
-    private Long uomId;
+    @NotNull
+    private BigDecimal amount;
     private Long projectId;
     private Long batchId;
 
@@ -21,6 +24,14 @@ public class ReceiptLine extends BaseModel {
     @JoinColumn(name="receipt_id")
     @JsonBackReference
     private Receipt receipt;
+
+    public Long getCommodityCategoryId() {
+        return commodityCategoryId;
+    }
+
+    public void setCommodityCategoryId(Long commodityCategoryId) {
+        this.commodityCategoryId = commodityCategoryId;
+    }
 
     public Long getCommodityId() {
         return commodityId;
@@ -30,20 +41,12 @@ public class ReceiptLine extends BaseModel {
         this.commodityId = commodityId;
     }
 
-    public Float getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Float amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
-    }
-
-    public Long getUomId() {
-        return uomId;
-    }
-
-    public void setUomId(Long uomId) {
-        this.uomId = uomId;
     }
 
     public Long getProjectId() {

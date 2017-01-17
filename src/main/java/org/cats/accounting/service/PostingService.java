@@ -2,10 +2,8 @@ package org.cats.accounting.service;
 
 import org.cats.accounting.config.AccountCode;
 import org.cats.accounting.config.JournalCode;
-import org.cats.accounting.domain.Account;
-import org.cats.accounting.domain.Journal;
-import org.cats.accounting.domain.Posting;
-import org.cats.accounting.domain.PostingItem;
+import org.cats.accounting.domain.*;
+import org.cats.accounting.repository.PostingItemRepository;
 import org.cats.accounting.repository.PostingRepository;
 import org.cats.stock.domain.Dispatch;
 import org.cats.stock.domain.DispatchItem;
@@ -14,7 +12,9 @@ import org.cats.stock.domain.ReceiptLine;
 import org.cats.stock.enums.DocumentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +27,8 @@ public class PostingService {
 
     private PostingRepository postingRepository;
 
+    private PostingItemRepository postingItemRepository;
+
     @Autowired
     AccountService accountService;
 
@@ -35,8 +37,9 @@ public class PostingService {
 
 
     @Autowired
-    public PostingService(PostingRepository postingRepository) {
+    public PostingService(PostingRepository postingRepository, PostingItemRepository postingItemRepository) {
         this.postingRepository = postingRepository;
+        this.postingItemRepository = postingItemRepository;
     }
 
 
@@ -44,69 +47,195 @@ public class PostingService {
         int x = 3;
     }
 
+    public boolean postingExistsForDocument( DocumentType documentType, Long id) {
+        return null != postingRepository.findByDocumentTypeAndDocumentId(documentType, id);
+    }
 
+    /**
+     * Constructs and returns posting entries from a Receipt docuement
+     *
+     * @param receipt
+     * @return
+     */
     public Posting post(Receipt receipt) {
-        /*
-           # Iterate on receipt lines and construct posting items
-           # Call internal 'post' method
-           # Return posting
-         */
 
         Account stockAccount = accountService.getAccount(AccountCode.STOCK);
         Account receivedAccount = accountService.getAccount(AccountCode.RECEIVED);
+
         Journal receiptJournal = journalService.getJournalByCode(JournalCode.GOODS_RECEIVED);
 
         List<PostingItem> postingItems = new ArrayList<>();
 
-        receipt.getReceiptLines().forEach(rl -> {
+        for (ReceiptLine rl : receipt.getReceiptLines()) {
+            /*
+                    DEBIT
+            */
             PostingItem debit = PostingItem.newPostingItem();
-            PostingItem credit = PostingItem.newPostingItem();
 
-            debit.setJournalId(receiptJournal.getId());
             debit.setAccountId(receivedAccount.getId());
-            debit.setQuantity(rl.getAmount() * -1);
-            debit.setCommodityId(rl.getCommodityId());
+            debit.setJournalId(receiptJournal.getId());
+
             debit.setDonorId(receipt.getSupplierId());
+
             debit.setHubId(receipt.getHubId());
             debit.setWarehouseId(receipt.getWarehouseId());
-            //debit.setProgramId(receipt.getProgramId());
 
-            credit.setJournalId(receiptJournal.getId());
+            debit.setProjectId(rl.getProjectId());
+            debit.setBatchId(rl.getBatchId());
+
+
+            debit.setProgramId(receipt.getProgramId());
+
+            debit.setCommodityId(rl.getCommodityId());
+            debit.setCommodityCategoryId(rl.getCommodityCategoryId());
+
+            debit.setQuantity(rl.getAmount().multiply(new BigDecimal(-1)));
+
+            postingItems.add(debit);
+
+            /*
+                    CREDIT
+             */
+            PostingItem credit = PostingItem.newPostingItem();
+
             credit.setAccountId(stockAccount.getId());
-            credit.setQuantity(rl.getAmount());
-            credit.setCommodityId(rl.getCommodityId());
+            credit.setJournalId(receiptJournal.getId());
             credit.setDonorId(receipt.getSupplierId());
+
             credit.setHubId(receipt.getHubId());
             credit.setWarehouseId(receipt.getWarehouseId());
-            //credit.setProgramId(receipt.getProgramId());
+
+            credit.setProjectId(rl.getProjectId());
+            credit.setBatchId(rl.getBatchId());
+
+            credit.setProgramId(receipt.getProgramId());
+
+            credit.setCommodityId(rl.getCommodityId());
+            credit.setCommodityCategoryId(rl.getCommodityCategoryId());
+
+            credit.setQuantity(rl.getAmount());
+
 
             postingItems.add(credit);
-            postingItems.add(debit);
-        });
+        }
 
 
-        return post( DocumentType.RECEIPT, receipt.getId(), postingItems);
+
+        return post( DocumentType.RECEIPT, receipt.getId(), PostingType.NORMAL, postingItems);
     }
 
     public Posting post(Dispatch dispatch) {
 
-        return post( DocumentType.DISPATCH, dispatch.getId(), new ArrayList<>());
+
+        Account stockAccount = accountService.getAccount(AccountCode.STOCK);
+        Account dispatchedAccount = accountService.getAccount(AccountCode.DISPATCHED);
+
+        Journal goodsIssueJournal = journalService.getJournalByCode(JournalCode.GOODS_ISSUE);
+
+
+        List<PostingItem> postingItems = new ArrayList<>();
+
+        for (DispatchItem dispatchItem : dispatch.getDispatchItems()) {
+            /*
+                    DEBIT
+            */
+            PostingItem debit = PostingItem.newPostingItem();
+
+            debit.setAccountId(stockAccount.getId());
+            debit.setJournalId(goodsIssueJournal.getId());
+
+            debit.setHubId(dispatch.getHubId());
+            debit.setFdpId(dispatch.getFdpId());
+
+            debit.setWarehouseId(dispatch.getWarehouseId());
+
+            debit.setProjectId(dispatchItem.getProjectId());
+            debit.setBatchId(dispatchItem.getBatchId());
+
+            if(null != dispatch.getOperation()) {
+                debit.setProgramId(dispatch.getOperation().getProgramId());
+            }
+
+            debit.setCommodityId(dispatchItem.getCommodityId());
+            debit.setCommodityCategoryId(dispatchItem.getCommodityCategoryId());
+
+            debit.setOperationId(dispatch.getOperationId());
+
+            debit.setQuantity(dispatchItem.getQuantity().multiply(new BigDecimal(-1)));
+
+            postingItems.add(debit);
+
+            /*
+                    CREDIT
+            */
+            PostingItem credit = PostingItem.newPostingItem();
+
+
+            credit.setAccountId(dispatchedAccount.getId());
+            credit.setJournalId(goodsIssueJournal.getId());
+
+
+            credit.setHubId(dispatch.getHubId());
+            credit.setFdpId(dispatch.getFdpId());
+
+            credit.setWarehouseId(dispatch.getWarehouseId());
+
+            credit.setProjectId(dispatchItem.getProjectId());
+            credit.setBatchId(dispatchItem.getBatchId());
+
+            if(null != dispatch.getOperation()) {
+                credit.setProgramId(dispatch.getOperation().getProgramId());
+            }
+
+            credit.setCommodityId(dispatchItem.getCommodityId());
+            credit.setCommodityCategoryId(dispatchItem.getCommodityCategoryId());
+
+            credit.setOperationId(dispatch.getOperationId());
+
+            credit.setQuantity(dispatchItem.getQuantity());
+
+            postingItems.add(credit);
+        }
+
+
+        return post( DocumentType.DISPATCH, dispatch.getId(), PostingType.NORMAL, postingItems);
     }
 
-    private Posting post(DocumentType documentType, Long documentId, List<PostingItem> postingItems) {
+    /*private Posting reversePosting( Posting posting) {
+
+    }*/
+
+    @Transactional
+    private Posting post(DocumentType documentType, Long documentId, PostingType postingType,  List<PostingItem> postingItems) {
+
+        if(!validatePost(postingItems)){
+            throw new IllegalArgumentException("Posting items did not pass validation.");
+        }
+
         Posting posting = new Posting();
         posting.setDocumentId(documentId);
         posting.setDocumentType(documentType);
-        posting.getPostingItems().addAll(postingItems);
+        posting.setPostingType(postingType);
+        posting.setPostingItems(postingItems);
 
-        if(validate(posting)){
-            postingRepository.save(posting);
+        postingRepository.save(posting);
+
+        for (PostingItem postingItem : postingItems) {
+            postingItem.setPosting(posting);
+            postingItemRepository.save(postingItem);
         }
 
-        return new Posting();
+        return posting;
     }
 
-    private Boolean validate(Posting posting){
-        return true;
+    private Boolean validatePost(List<PostingItem> postingItems)
+    {
+        BigDecimal sumOfQuantities = new BigDecimal(0);
+
+        for (PostingItem postingItem : postingItems) {
+            sumOfQuantities = sumOfQuantities.add(postingItem.getQuantity()) ;
+        }
+
+        return sumOfQuantities.equals(new BigDecimal(0));
     }
 }

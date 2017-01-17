@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.cats.accounting.service.PostingService;
 import org.cats.stock.domain.Dispatch;
+import org.cats.stock.repository.DispatchItemRepository;
 import org.cats.stock.repository.DispatchRepository;
 import org.cats.stock.util.DispatchTestUtil;
 import org.cats.util.URLBuilder;
@@ -36,16 +38,19 @@ public class DispatchServiceTest {
 	
 	@Mock 
 	RestTemplate restTemplate;
-	
+
+
 	private DispatchService dispatchService ;	
-	
+	private DispatchItemRepository dispatchItemRepository ;
+	private PostingService postingService ;
+
 	 
 	private static List<Integer> fdp_ids_response= new ArrayList<>();
 	
 
 	@Before
 	public void setUp() {
-		dispatchService = new DispatchService(dispatchRepository);
+		dispatchService = new DispatchService(dispatchRepository, dispatchItemRepository, postingService);
 		dispatchService.setUrlBuilder(urlBuilder);
 		dispatchService.setRestTemplate(restTemplate);
 		
