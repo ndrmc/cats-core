@@ -1,5 +1,7 @@
 package org.cats.stock.service;
 
+import org.cats.accounting.domain.Posting;
+import org.cats.accounting.domain.PostingType;
 import org.cats.accounting.service.PostingService;
 import org.cats.stock.domain.Receipt;
 import org.cats.stock.domain.ReceiptLine;
@@ -82,18 +84,22 @@ public class ReceiptServiceImpl  {
             throw new ReceiptServiceException("No receipt document exists for the id: " + receipt.getId().toString());
         }
 
+        Receipt updatedReceipt = receiptRepository.save(receipt);
 
         if(!receipt.isDraft()) {
-            if( !postingService.postingExistsForDocument(DocumentType.RECEIPT, receipt.getId())) {
+            if( !postingService.postingExistsForDocument(DocumentType.RECEIPT, receipt.getId(), PostingType.NORMAL)) {
                 postingService.post(receipt);
             }
             else {
-                //Reverse and register a new transaction
+                Posting posting = postingService.getPostingForDocument(DocumentType.RECEIPT, receipt.getId(), PostingType.NORMAL);
+
+                postingService.reversePosting(posting);
+
+                postingService.post(updatedReceipt);
             }
         }
 
-
-        return receiptRepository.save(receipt);
+        return updatedReceipt;
     }
 
     

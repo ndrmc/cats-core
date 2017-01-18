@@ -14,7 +14,7 @@ import java.util.UUID;
  */
 
 @Entity
-public class PostingItem extends BaseModel {
+public class PostingItem extends BaseModel implements Cloneable {
     UUID postingItemCode;
 
     Long accountId;
@@ -43,13 +43,48 @@ public class PostingItem extends BaseModel {
     Long fdpId;
 
 
+    @Override
+    public PostingItem clone() {
+
+        PostingItem clonedItem = new PostingItem();
+
+        clonedItem.setPostingItemCode(UUID.randomUUID());
+        clonedItem.setAccountId(this.accountId);
+        clonedItem.setJournalId(journalId);
+        clonedItem.setDonorId(donorId);
+        clonedItem.setHubId(hubId);
+        clonedItem.setWarehouseId(warehouseId);
+        clonedItem.setStoreId(storeId);
+        clonedItem.setStackId(stackId);
+        clonedItem.setProjectId(projectId);
+        clonedItem.setBatchId(batchId);
+        clonedItem.setProgramId(programId);
+        clonedItem.setOperationId(operationId);
+        clonedItem.setCommodityId(commodityId);
+        clonedItem.setCommodityCategoryId(commodityCategoryId);
+
+        clonedItem.setQuantity(quantity);
+
+        clonedItem.setRegionId(regionId);
+        clonedItem.setZoneId(zoneId);
+        clonedItem.setWoredaId(woredaId);
+        clonedItem.setFdpId(fdpId);
+
+        clonedItem.setPosting(posting);
+
+
+        return clonedItem;
+
+    }
+
+
+
     @ManyToOne
     @JsonIgnore
     Posting posting;
 
     @PrePersist
     protected void populateFieldsPrePersist() {
-
         postingItemCode = UUID.randomUUID();
     }
 
