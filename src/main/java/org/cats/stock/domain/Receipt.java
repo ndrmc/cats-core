@@ -32,7 +32,7 @@ public class Receipt extends BaseModel {
     private Long warehouseId;
     private Long programId;
     private String remark;
-    private String driverName;
+    private String driversName;
     private Long storeId;
 
     /**
@@ -217,12 +217,12 @@ public class Receipt extends BaseModel {
         this.remark = remark;
     }
 
-    public String getDriverName() {
-        return driverName;
+    public String getDriversName() {
+        return driversName;
     }
 
-    public void setDriverName(String driverName) {
-        this.driverName = driverName;
+    public void setDriversName(String driverName) {
+        this.driversName = driverName;
     }
 
     public Long getStoreId() {

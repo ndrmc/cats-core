@@ -207,7 +207,7 @@ create table receipt (
   commodity_source_id  int4                 null,
   program_id          int4                   null,
   store_id            int4                   null,
-  driver_name         varchar(200)         null,
+  drivers_name         varchar(200)         null,
   remark              text         null,
   draft               BOOL                 null,
 

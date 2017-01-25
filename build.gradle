@@ -85,3 +85,11 @@ jacocoTestReport {
         csv.enabled false
     }
 }
+
+task(start, type: JavaExec) {
+//	dependsOn 'build'
+	dependsOn 'flywayMigrate'
+	dependsOn 'flywayInfo'
+	main = 'org.cats.CatsApplication'
+	classpath = sourceSets.main.runtimeClasspath
+}
