@@ -19,6 +19,7 @@ import java.util.List;
  * Created by alexander on 1/4/17.
  */
 
+@CrossOrigin(origins = "*", allowedHeaders = "Origin, X-Requested-With, Content-Type, Accept")
 @RestController
 @RequestMapping(value = "/receipts")
 @Api(value = "receipts", description = "Manages hub receipt (GRN) records")

@@ -20,6 +20,7 @@ import java.util.List;
  * Created by alexander on 1/9/17.
  */
 
+@CrossOrigin
 @RestController
 @RequestMapping(value = "/receiptLines")
 @Api(value = "receipts", description = "Manages hub receipt record line items.")

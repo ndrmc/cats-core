@@ -65,10 +65,11 @@ public class ReceiptServiceImpl  {
     public Receipt saveReceipt(Receipt receipt) {
         receipt = receiptRepository.save(receipt);
 
-        for (ReceiptLine receiptLine : receipt.getReceiptLines()) {
-            receiptLineItemRepository.save(receiptLine);
+        if( receipt.getReceiptLines() != null ) {
+            for (ReceiptLine receiptLine : receipt.getReceiptLines()) {
+                receiptLineItemRepository.save(receiptLine);
+            }
         }
-
 
         if( !receipt.isDraft()) {
             postingService.post(receipt);
