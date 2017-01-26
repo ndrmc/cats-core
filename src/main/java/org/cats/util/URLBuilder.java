@@ -14,17 +14,17 @@ import org.springframework.stereotype.Component;
 @Component
 @PropertySource("application.properties")
 public class URLBuilder {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(DispatchItemController.class);
-	
+
 	@Value("${cats.api.fdp.byRegion}")
 	private String fdpURL;
-	
+
 	public URI getFdpIdsByRegion(Integer regionId){
-		
-		System.out.println("Request URI: "+fdpURL);	
+
+		System.out.println("Request URI: "+fdpURL);
 		return URI.create(fdpURL.concat(String.valueOf(regionId))) ;
-		
+
 	}
 
 }

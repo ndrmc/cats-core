@@ -171,8 +171,8 @@ create table operation (
 /* Table: operation_region                                      */
 /*==============================================================*/
 create table operation_region (
-  id                   int4                 not null,
-  operation_id         int4                 not null,
+  id                   serial                 not null,
+  operation_id         int4                   null,
   region_id            int4                 not null,
 
   created_date         timestamp with time zone                 null,
