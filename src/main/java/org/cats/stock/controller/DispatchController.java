@@ -19,7 +19,7 @@ import io.swagger.annotations.ApiOperation;
 import javassist.NotFoundException;
 
 @RestController
-@Api(value = "dispatch", description = "Dispatch(GIN)" )
+@Api(value = "dispatches", description = "Dispatch(GIN)" )
 public class DispatchController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DispatchController.class);
 	
@@ -36,21 +36,21 @@ public class DispatchController {
 	}
 
 	@ApiOperation(value = "Create a new Dispatch(GIN) record" )
-	@RequestMapping(value = "/dispatch", method = RequestMethod.POST)
+	@RequestMapping(value = "", method = RequestMethod.POST)
 	public Dispatch createDispatch(@RequestBody @Valid final Dispatch dispatch) {
 		LOGGER.debug("Create dispatch request", dispatch);
 		return dispatchService.save(dispatch);
 	}
 
 	@ApiOperation(value = "View a specific Dispatch(GIN) record by id" )
-	@RequestMapping(value = "/dispatch/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public Dispatch getDispatchById(@PathVariable Long id) {
 		LOGGER.debug("Get dispatch by id"+ id);
 		return dispatchService.findById(id);
 	}
 
 	@ApiOperation(value = "View Dispatch(GIN) record by gin number" )
-	@RequestMapping(value = "/dispatch/gin/{gin}", method = RequestMethod.GET)
+	@RequestMapping(value = "gin/{gin}", method = RequestMethod.GET)
 	public Dispatch getDispatchbyGin(@PathVariable String gin) {
 		LOGGER.debug("Get dispatch by gin");
 		return dispatchService.findByGin(gin);
@@ -64,7 +64,7 @@ public class DispatchController {
 	}
 
 	@ApiOperation(value = "Delete a Dispatch(GIN) record" )
-	@RequestMapping(value = "/dispatch/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	public void deleteDispatch(@PathVariable Long id) {
 		LOGGER.debug("Delete dispatch request", id);
 		dispatchService.delete(id);
@@ -78,21 +78,21 @@ public class DispatchController {
 	}
 	
 	@ApiOperation(value = "View all Dispatch(GIN) records by operation" )
-	@RequestMapping(value = "/dispatch/operation/{operationId}", method = RequestMethod.GET)
+	@RequestMapping(value = "operation/{operationId}", method = RequestMethod.GET)
 	public List<Dispatch> listDispatchesbyOperation(@PathVariable Integer operationId) {
 		LOGGER.debug("List all dispatches request");
 		return dispatchService.getListbyOperation(operationId);
 	}
 	
 	@ApiOperation(value = "View all Dispatch(GIN) records by requisition" )
-	@RequestMapping(value = "/dispatch/requisition/{requisitionNo}", method = RequestMethod.GET)
+	@RequestMapping(value = "requisition/{requisitionNo}", method = RequestMethod.GET)
 	public List<Dispatch> listDispatchesbyRequsition(@PathVariable String requisitionNo) {
 		LOGGER.debug("List all dispatches request");
 		return dispatchService.getListbyRequisition(requisitionNo);
 	}
 	
 	@ApiOperation(value = "View all Dispatch(GIN) records by region" )
-	@RequestMapping(value = "/dispatch/region/{regionId}", method = RequestMethod.GET)
+	@RequestMapping(value = "region/{regionId}", method = RequestMethod.GET)
 	public List<Dispatch> listDispatchesbyRegion(@PathVariable Integer regionId) {
 		LOGGER.debug("List all dispatches request");
 		return dispatchService.getListbyRegion(regionId);
