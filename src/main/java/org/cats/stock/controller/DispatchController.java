@@ -57,9 +57,11 @@ public class DispatchController {
 	}
 	
 	@ApiOperation(value = "Update an existing Dispatch(GIN) record" )
-	@RequestMapping(value = "/dispatch", method = RequestMethod.PUT)
-	public Dispatch updateDispatch(@RequestBody @Valid final Dispatch dispatch) throws NotFoundException {
-		LOGGER.debug("Create dispatch request", dispatch);
+	@RequestMapping(value = "/dispatch/{id}", method = RequestMethod.PUT)
+	public Dispatch updateDispatch(@PathVariable("id") Long id, @RequestBody @Valid final Dispatch dispatch) throws NotFoundException {
+
+		dispatch.setId(id);
+
 		return dispatchService.update(dispatch);
 	}
 
