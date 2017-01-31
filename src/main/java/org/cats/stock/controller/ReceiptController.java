@@ -79,6 +79,15 @@ public class ReceiptController {
         return receiptService.updateReceipt(receipt);
     }
 
+    @RequestMapping( value = "/{id}",method = RequestMethod.PUT , consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE}, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE} )
+    @ApiOperation(value = "Updates a receipt document by replacing all properties by the payload.")
+    public Receipt replaceReceipt(@PathVariable("id") Long id, @Validated @RequestBody Receipt receipt) {
+
+        receipt.setId(id);
+
+        return receiptService.updateReceipt(receipt);
+    }
+
     @RequestMapping( value = "/{id}",method = RequestMethod.DELETE )
     @ApiOperation(value = "Deletes a receipt document.")
     public ResponseEntity<Receipt> deleteReceipt(@PathVariable("id") Long id) {
