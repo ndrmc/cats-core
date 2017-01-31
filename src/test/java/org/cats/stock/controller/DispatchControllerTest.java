@@ -94,7 +94,7 @@ public class DispatchControllerTest {
 		Dispatch updatedDispatch = null;
 		try {
 
-			updatedDispatch=dispatchController.updateDispatch(savedDispatch);
+			updatedDispatch=dispatchController.updateDispatch(savedDispatch.getId(), savedDispatch);
 			verify(dispatchService, times(1)).update(savedDispatch);
 
 		} catch (NotFoundException e) {
