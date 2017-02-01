@@ -1,8 +1,6 @@
 package org.cats.stock.service;
 
 import java.util.List;
-import java.util.function.Predicate;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -10,7 +8,6 @@ import org.cats.stock.domain.Operation;
 import org.cats.stock.domain.OperationRegion;
 import org.cats.stock.repository.OperationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,14 +19,10 @@ public class OperationService {
 	@Autowired
 	OperationRepository operationRepository;
 
-	@Autowired
-	private OperationRegionRepository operationRegionRepository;
-
-
 
 	@Transactional
-	public Operation findById(@NotNull Long dispatchId) {
-		return operationRepository.findOne(dispatchId);
+	public Operation findById(@NotNull Long operationId) {
+		return operationRepository.findOne(operationId);
 	}
 
 	@Transactional(readOnly = true)
@@ -73,10 +66,10 @@ public class OperationService {
 	}
 
 	@Transactional
-	public void delete(@NotNull Long dispatchId) {
-		Operation dispatched=operationRepository.findOne(dispatchId);
+	public void delete(@NotNull Long operationId) {
+		Operation dispatched=operationRepository.findOne(operationId);
 		if(dispatched!=null){
-			operationRepository.delete(dispatchId);
+			operationRepository.delete(operationId);
 		}
 	}
 

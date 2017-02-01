@@ -79,7 +79,7 @@ public class DispatchController {
 	
 	@ApiOperation(value = "View all Dispatch(GIN) records by operation" )
 	@RequestMapping(value = "/dispatch/operation/{operationId}", method = RequestMethod.GET)
-	public List<Dispatch> listDispatchesbyOperation(@PathVariable Integer operationId) {
+	public List<Dispatch> listDispatchesbyOperation(@PathVariable Long operationId) {
 		LOGGER.debug("List all dispatches request");
 		return dispatchService.getListbyOperation(operationId);
 	}

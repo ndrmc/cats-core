@@ -144,7 +144,7 @@ public class DispatchService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Dispatch> getListbyOperation(Integer operationId) {
+	public List<Dispatch> getListbyOperation(Long operationId) {
 		return dispatchRepository.findByOperationId(operationId);
 	}
 

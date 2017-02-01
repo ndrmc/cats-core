@@ -1,4 +1,4 @@
-package org.cats.stock.service;
+package org.cats.stock.repository;
 
 import java.util.List;
 

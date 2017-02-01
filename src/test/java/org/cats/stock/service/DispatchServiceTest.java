@@ -156,7 +156,7 @@ public class DispatchServiceTest {
 
 	private void stubRepositoryToReturnDispatches(int size) {
 		when(dispatchRepository.findAll()).thenReturn(DispatchTestUtil.createDispatchList(size));
-		when(dispatchRepository.findByOperationId(any(Integer.class))).thenReturn(DispatchTestUtil.createDispatchList(size));
+		when(dispatchRepository.findByOperationId(any(Long.class))).thenReturn(DispatchTestUtil.createDispatchList(size));
 		when(dispatchRepository.findByRequisitionNo(any(String.class))).thenReturn(DispatchTestUtil.createDispatchList(size));
 
 
@@ -165,11 +165,11 @@ public class DispatchServiceTest {
 	@Test
 	public void testGetListbyOperation() {
 		stubRepositoryToReturnDispatches(5);
-		Collection<Dispatch> dispatches = dispatchService.getListbyOperation(1);
+		Collection<Dispatch> dispatches = dispatchService.getListbyOperation(Long.parseLong("1"));
 		assertNotNull(dispatches);
 		assertEquals(5, dispatches.size());
 
-		verify(dispatchRepository, times(1)).findByOperationId(1);
+		verify(dispatchRepository, times(1)).findByOperationId(Long.parseLong("1"));
 	}
 
 	@Test
