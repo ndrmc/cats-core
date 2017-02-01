@@ -1,5 +1,6 @@
 package org.cats.stock.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -174,6 +175,8 @@ public class Dispatch extends BaseModel {
 	}
 
 	public List<DispatchItem> getDispatchItems() {
+		if (this.dispatchItems==null)
+			return new ArrayList<>();
 		return dispatchItems;
 	}
 

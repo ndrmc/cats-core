@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.cats.accounting.domain.Posting;
 import org.cats.accounting.service.PostingService;
+import org.cats.location.domain.Fdp;
 import org.cats.stock.domain.Dispatch;
 import org.cats.stock.repository.DispatchItemRepository;
 import org.cats.stock.repository.DispatchRepository;
@@ -49,11 +51,6 @@ public class DispatchServiceTest {
 	private DispatchService dispatchService ;
 
 
-
-
-	private static List<Integer> fdp_ids_response= new ArrayList<>();
-
-
 	@Before
 	public void setUp() {
 		dispatchService = new DispatchService(dispatchRepository, dispatchItemRepository, postingService);
@@ -71,21 +68,28 @@ public class DispatchServiceTest {
 	}
 
 	private Dispatch stubRepositoryToReturnDispatchOnSave() {
-        final Dispatch dispatch = DispatchTestUtil.createDispatch();
-        when(dispatchRepository.save(any(Dispatch.class))).thenReturn(dispatch);
+		final Dispatch dispatch = DispatchTestUtil.createDispatch();
+		when(dispatchRepository.save(any(Dispatch.class))).thenReturn(dispatch);
 		return dispatch;
-    }
+	}
 
 	private void stubApiReponse() {
 		when(dispatchRepository.findByFdpIdIn(any())).thenReturn(DispatchTestUtil.createDispatchList(3));
 
-		List<Integer> fdpIds = new ArrayList<>(2);
-		fdpIds.add(Integer.parseInt("1"));
-		fdpIds.add(Integer.parseInt("2"));
+		Fdp[] fdpArray = new Fdp[2];
+		Fdp fdp1 = new Fdp();
+		Fdp fdp2 = new Fdp();
 
-       when(restTemplate.getForObject(any(URI.class), any())).thenReturn(fdpIds );
+		fdpArray[0]=fdp1;
+		fdpArray[1]=fdp2;
 
-    }
+		when(restTemplate.getForObject(any(URI.class), any())).thenReturn(fdpArray );
+
+	}
+
+	private void stubPostingService(){
+		when(postingService.post(any(Dispatch.class))).thenReturn(new Posting());
+	}
 
 
 
@@ -192,6 +196,15 @@ public class DispatchServiceTest {
 		assertEquals(3, dispatches.size());
 		verify(restTemplate,times(1)).getForObject(any(URI.class), any());
 		verify(dispatchRepository, times(1)).findByFdpIdIn(any());
+
+	}
+
+	public void testSaveDispatchWithItems(){
+
+		//to be implemented
+	}
+
+	public void testUpdateDispatchWithItems(){
 
 	}
 

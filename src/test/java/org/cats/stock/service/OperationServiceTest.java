@@ -36,6 +36,7 @@ public class OperationServiceTest {
 		Operation operation =new Operation();
 		operation.setName("test operation 1");
 		operation.setYear("2017");
+		operation.setOperationRegions(new ArrayList<>());
 
 		when(operationRepository.findOne(any(Long.class))).thenReturn(operation);
 		when(operationRepository.save(any(Operation.class))).thenReturn(operation);		
