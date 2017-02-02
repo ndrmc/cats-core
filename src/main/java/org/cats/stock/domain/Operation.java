@@ -3,12 +3,17 @@ package org.cats.stock.domain;
 import org.cats.core.BaseModel;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Operation extends BaseModel {
-	  
+
 	private Long programId;
 	private Long planId;
 	private String name;
@@ -22,7 +27,10 @@ public class Operation extends BaseModel {
 	private Date actualStart;
 	private Date actualEnd;
 	private String status;
-	
+
+	@OneToMany(mappedBy = "operation" , cascade = CascadeType.ALL , orphanRemoval = true)
+	private List<OperationRegion> operationRegions;
+
 	public Long getProgramId() {
 		return programId;
 	}
@@ -101,9 +109,15 @@ public class Operation extends BaseModel {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
-	
-	
-	
+	public List<OperationRegion> getOperationRegions() {
+		return operationRegions;
+	}
+	public void setOperationRegions(List<OperationRegion> operationRegions) {
+		this.operationRegions = operationRegions;
+	}
+
+
+
+
 
 }

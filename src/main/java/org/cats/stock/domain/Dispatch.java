@@ -1,5 +1,6 @@
 package org.cats.stock.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +10,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.cats.core.BaseModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -175,6 +175,8 @@ public class Dispatch extends BaseModel {
 	}
 
 	public List<DispatchItem> getDispatchItems() {
+		if (this.dispatchItems==null)
+			return new ArrayList<>();
 		return dispatchItems;
 	}
 

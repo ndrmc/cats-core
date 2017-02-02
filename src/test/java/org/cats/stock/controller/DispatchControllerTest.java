@@ -51,7 +51,7 @@ public class DispatchControllerTest {
 
 	private void stubServiceToReturnDispatches(int howMany) {
 		when(dispatchService.getList()).thenReturn(DispatchTestUtil.createDispatchList(howMany));
-		when(dispatchService.getListbyOperation(any(Integer.class))).thenReturn(DispatchTestUtil.createDispatchList(howMany));
+		when(dispatchService.getListbyOperation(any(Long.class))).thenReturn(DispatchTestUtil.createDispatchList(howMany));
 		when(dispatchService.getListbyRegion(any(Integer.class))).thenReturn(DispatchTestUtil.createDispatchList(howMany));
 		when(dispatchService.getListbyRequisition(any(String.class))).thenReturn(DispatchTestUtil.createDispatchList(howMany));
 	}
@@ -122,11 +122,11 @@ public class DispatchControllerTest {
 	@Test
 	public void testListDispatchesbyOperation() {
 		stubServiceToReturnDispatches(5);
-		Collection<Dispatch> dispatches = dispatchController.listDispatchesbyOperation(1);
+		Collection<Dispatch> dispatches = dispatchController.listDispatchesbyOperation(Long.parseLong("1"));
 		assertNotNull(dispatches);
 		assertEquals(5, dispatches.size());
 
-		verify(dispatchService, times(1)).getListbyOperation(1);
+		verify(dispatchService, times(1)).getListbyOperation(Long.parseLong("1"));
 	}
 
 	@Test
