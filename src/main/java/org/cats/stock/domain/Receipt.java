@@ -33,6 +33,9 @@ public class Receipt extends BaseModel {
     private Long commoditySourceId;
     private Long warehouseId;
     private Long programId;
+    private String remark;
+    private String driversName;
+    private Long storeId;
 
     /**
      * Determines whether posting entry should be created for the receipt || not
@@ -208,5 +211,29 @@ public class Receipt extends BaseModel {
 
     public void setReceiptLines(List<ReceiptLine> receiptLines) {
         this.receiptLines = receiptLines;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getDriversName() {
+        return driversName;
+    }
+
+    public void setDriversName(String driverName) {
+        this.driversName = driverName;
+    }
+
+    public Long getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Long storeId) {
+        this.storeId = storeId;
     }
 }

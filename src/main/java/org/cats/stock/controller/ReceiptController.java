@@ -19,6 +19,7 @@ import java.util.List;
  * Created by alexander on 1/4/17.
  */
 
+@CrossOrigin(origins = "*", allowedHeaders = "Origin, X-Requested-With, Content-Type, Accept")
 @RestController
 @RequestMapping(value = "/receipts")
 @Api(value = "receipts", description = "Manages hub receipt (GRN) records")
@@ -74,6 +75,15 @@ public class ReceiptController {
         }
 
         receipt.updateFields(receiptDiff);
+
+        return receiptService.updateReceipt(receipt);
+    }
+
+    @RequestMapping( value = "/{id}",method = RequestMethod.PUT , consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE}, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE} )
+    @ApiOperation(value = "Updates a receipt document by replacing all properties by the payload.")
+    public Receipt replaceReceipt(@PathVariable("id") Long id, @Validated @RequestBody Receipt receipt) {
+
+        receipt.setId(id);
 
         return receiptService.updateReceipt(receipt);
     }

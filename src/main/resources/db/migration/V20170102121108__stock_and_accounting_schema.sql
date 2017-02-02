@@ -206,6 +206,9 @@ create table receipt (
   invoice_no           varchar(200)         null,
   commodity_source_id  int4                 null,
   program_id          int4                   null,
+  store_id            int4                   null,
+  drivers_name         varchar(200)         null,
+  remark              text         null,
   draft               BOOL                 null,
 
   created_date         timestamp with time zone                 null,
