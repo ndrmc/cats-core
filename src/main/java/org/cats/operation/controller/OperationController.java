@@ -1,11 +1,11 @@
-package org.cats.stock.controller;
+package org.cats.operation.controller;
 
 import java.util.List;
 
 import javax.validation.Valid;
 
-import org.cats.stock.domain.Operation;
-import org.cats.stock.service.OperationService;
+import org.cats.operation.domain.Operation;
+import org.cats.operation.service.OperationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -69,5 +69,10 @@ public class OperationController {
 	public List<Operation> listOperationsByYear(@PathVariable String year) {		
 		return operationService.getListbyYear(year);
 	}
+
+
+	@ApiOperation(value="Fetch all remote operations from CATS main server")
+	@RequestMapping(value = "/operation/all", method = RequestMethod.GET)
+	public List<Operation> getRemoteOperations(){return operationService.fetchRemoteOperations();}
 	
 }

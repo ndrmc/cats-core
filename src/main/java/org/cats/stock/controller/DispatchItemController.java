@@ -85,6 +85,5 @@ public class DispatchItemController {
 	public void deleteDispatchItem(@PathVariable Long id) {
 		LOGGER.debug("Delete dispatchItem request", id);
 		dispatchService.delete(id);
-	}	
-	
+	}
 }

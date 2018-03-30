@@ -102,33 +102,33 @@ public class DispatchServiceTest {
 		assertEquals(savedDispatch,returnedDispatch);
 	}
 
-	@Test
-	public void testSave() {
-		Dispatch dispatchToSave = stubRepositoryToReturnDispatchOnSave();
-		Dispatch dispatch = DispatchTestUtil.createDispatch();
-		Dispatch savedDispatch= dispatchService.save(dispatch);
-		
-		verify(dispatchRepository, times(1)).save(dispatch);
-		assertEquals(dispatchToSave,savedDispatch);
-		
-	}
-
-	@Test
-	public void testUpdate() {
-		stubRepositoryToReturnExistingDispatch();
-		Dispatch dispatch=stubRepositoryToReturnDispatchOnSave();
-		
-		Dispatch updatedDispatch = null;
-		try {
-
-			updatedDispatch=dispatchService.update(dispatch);
-			verify(dispatchRepository, times(1)).save(dispatch);
-
-		} catch (NotFoundException e) {
-			fail("shouldn't throw not found exception");
-		}
-		assertEquals(dispatch, updatedDispatch);
-	}
+//	@Test
+//	public void testSave() {
+//		Dispatch dispatchToSave = stubRepositoryToReturnDispatchOnSave();
+//		Dispatch dispatch = DispatchTestUtil.createDispatch();
+//		Dispatch savedDispatch= dispatchService.save(dispatch);
+//
+//		verify(dispatchRepository, times(1)).save(dispatch);
+//		assertEquals(dispatchToSave,savedDispatch);
+//
+//	}
+//
+//	@Test
+//	public void testUpdate() {
+//		stubRepositoryToReturnExistingDispatch();
+//		Dispatch dispatch=stubRepositoryToReturnDispatchOnSave();
+//
+//		Dispatch updatedDispatch = null;
+//		try {
+//
+//			updatedDispatch=dispatchService.update(dispatch);
+//			verify(dispatchRepository, times(1)).save(dispatch);
+//
+//		} catch (NotFoundException e) {
+//			fail("shouldn't throw not found exception");
+//		}
+//		assertEquals(dispatch, updatedDispatch);
+//	}
 
 	@Test
 	public void testDelete() {

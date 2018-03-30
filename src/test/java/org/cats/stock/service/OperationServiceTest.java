@@ -9,10 +9,9 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.cats.stock.controller.OperationController;
-import org.cats.stock.domain.Operation;
-import org.cats.stock.repository.OperationRepository;
-import org.junit.Before;
+import org.cats.operation.domain.Operation;
+import org.cats.operation.repository.OperationRepository;
+import org.cats.operation.service.OperationService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

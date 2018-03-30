@@ -17,14 +17,16 @@ public class URLBuilder {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DispatchItemController.class);
 	
-	@Value("${cats.api.fdp.byRegion}")
-	private String fdpURL;
+	@Value("${cats.api.url}")
+	private String catsApiUrl;
 	
 	public URI getFdpIdsByRegion(Integer regionId){
-		
-		System.out.println("Request URI: "+fdpURL);	
-		return URI.create(fdpURL.concat(String.valueOf(regionId))) ;
-		
+		System.out.println("Request URI: "+catsApiUrl);
+		return URI.create(catsApiUrl.concat(String.valueOf(regionId))) ;
+	}
+
+	public URI getOperations(){
+		return URI.create(catsApiUrl.concat("/operations"));
 	}
 
 }

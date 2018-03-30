@@ -1,9 +1,8 @@
-package org.cats.stock;
+package org.cats.stock.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.cats.stock.controller.ReceiptController;
 import org.cats.stock.domain.Receipt;
-import org.cats.stock.service.ReceiptServiceImpl;
+import org.cats.stock.service.ReceiptService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +38,7 @@ public class ReceiptControllerTests  {
     private MockMvc mockMvc;
 
     @MockBean
-    private ReceiptServiceImpl receiptService;
+    private ReceiptService receiptService;
 
     @Before
     public void setup() {

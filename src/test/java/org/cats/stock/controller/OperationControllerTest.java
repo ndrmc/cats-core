@@ -9,14 +9,13 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.cats.stock.domain.Operation;
-import org.cats.stock.service.OperationService;
-import org.junit.Before;
+import org.cats.operation.controller.OperationController;
+import org.cats.operation.domain.Operation;
+import org.cats.operation.service.OperationService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 
 import javassist.NotFoundException;
 import org.mockito.runners.MockitoJUnitRunner;

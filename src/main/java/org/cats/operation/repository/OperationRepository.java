@@ -1,8 +1,8 @@
-package org.cats.stock.repository;
+package org.cats.operation.repository;
 
 import java.util.List;
 
-import org.cats.stock.domain.Operation;
+import org.cats.operation.domain.Operation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OperationRepository extends JpaRepository<Operation, Long> {

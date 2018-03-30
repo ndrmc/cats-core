@@ -20,16 +20,16 @@ import java.util.List;
  */
 
 @Service
-public class ReceiptServiceImpl  {
+public class ReceiptService {
 
     private ReceiptRepository receiptRepository;
     private ReceiptLineItemRepository receiptLineItemRepository;
     private PostingService postingService;
 
     @Autowired
-    public ReceiptServiceImpl(ReceiptRepository receiptRepository,
-                              ReceiptLineItemRepository receiptLineItemRepository,
-                              PostingService postingService
+    public ReceiptService(ReceiptRepository receiptRepository,
+                          ReceiptLineItemRepository receiptLineItemRepository,
+                          PostingService postingService
                               ) {
         this.receiptRepository = receiptRepository;
         this.receiptLineItemRepository = receiptLineItemRepository;

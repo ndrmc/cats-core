@@ -1,12 +1,10 @@
-package org.cats.stock;
+package org.cats.stock.service;
 
 import org.cats.accounting.service.PostingService;
 import org.cats.stock.domain.Receipt;
 import org.cats.stock.domain.ReceiptLine;
 import org.cats.stock.repository.ReceiptLineItemRepository;
 import org.cats.stock.repository.ReceiptRepository;
-import org.cats.stock.service.ReceiptServiceImpl;
-import org.cats.stock.service.ReceiptServiceImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,11 +40,11 @@ public class ReceiptServiceTests {
     @MockBean
     private PostingService postingService;
 
-    private ReceiptServiceImpl receiptService;
+    private ReceiptService receiptService;
 
     @Before
     public void setUp() {
-        receiptService = new ReceiptServiceImpl(receiptRepository, receiptLineItemRepository, postingService);
+        receiptService = new ReceiptService(receiptRepository, receiptLineItemRepository, postingService);
     }
 
 

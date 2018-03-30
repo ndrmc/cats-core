@@ -1,25 +1,34 @@
-package org.cats.stock.service;
+package org.cats.operation.service;
 
 import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import org.cats.stock.domain.Operation;
-import org.cats.stock.repository.OperationRepository;
+import org.cats.operation.domain.Operation;
+import org.cats.operation.repository.OperationRepository;
+import org.cats.util.URLBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javassist.NotFoundException;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class OperationService {
 	
 	@Autowired
-	OperationRepository operationRepository;
-	
-	
+	private OperationRepository operationRepository;
+
+	@Autowired
+	private RestTemplate restTemplate;
+
+	@Autowired
+	private URLBuilder urlBuilder;
 
 	@Transactional
 	public Operation findById(@NotNull Long dispatchId) {
@@ -62,6 +71,14 @@ public class OperationService {
 	public List<Operation> getListbyYear(String year) {
 		return operationRepository.findByYear(year);
 	}
-	
+
+	public List<Operation> fetchRemoteOperations(){
+        ResponseEntity<List<Operation>> operationsResult  =
+                restTemplate.exchange(urlBuilder.getOperations(),
+                        HttpMethod.GET, null, new ParameterizedTypeReference<List<Operation>>() {
+                        });
+        List<Operation> operations = operationsResult.getBody();
+        return operations;
+	}
 
 }

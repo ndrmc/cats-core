@@ -1,20 +1,15 @@
 package org.cats.core;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.Generated;
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Objects;
 
 @MappedSuperclass
 public class BaseModel {
@@ -26,37 +21,38 @@ public class BaseModel {
     private Long id;
 
 
-    private Date createdDate;
-
-    private Date updatedDate;
+    private Date createdAt;
+    private Date updatedAt;
+    private Boolean dirty;
 
 
 
 
     @PrePersist
     protected void onCreate() {
-        createdDate = new Date();
+        createdAt = new Date();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        updatedDate = new Date();
+        updatedAt = new Date();
+        dirty = true;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public Date getUpdatedDate() {
-        return updatedDate;
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public BaseModel updateFields(ObjectNode domainDiff ) {
